@@ -10,12 +10,15 @@
 /**
 * @ignore
 */
+
+namespace phpbb\karma\includes\type;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_includes_type_base implements phpbb_ext_phpbb_karma_includes_type_interface
+class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\includes\type\type_interface
 {
 	/**
 	* Get the url of the specified item

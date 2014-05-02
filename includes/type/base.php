@@ -10,12 +10,14 @@
 /**
 * @ignore
 */
+namespace phpbb\karma\includes\type;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_includes_type_base
+class base
 {
 	/**
 	* Authentication object
@@ -65,7 +67,7 @@ class phpbb_ext_phpbb_karma_includes_type_base
 	* @param string				$php_ext			php file extension
 	* @param string				$table_name			Name of the karma database table
 	*/
-	public function __construct(phpbb_auth $auth, phpbb_db_driver $db, phpbb_user $user, $phpbb_root_path, $php_ext, $table_name)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver $db, \phpbb\user $user, $phpbb_root_path, $php_ext, $table_name)
 	{
 		$this->auth = $auth;
 		$this->db = $db;

@@ -10,12 +10,15 @@
 /**
 * @ignore
 */
+
+namespace phpbb\karma\mcp;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_mcp_reported_karma
+class reported_karma
 {
 	public function __construct($p_master)
 	{

@@ -118,7 +118,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 			// UCP module
 			array('module.add', array('ucp', '', 'UCP_KARMA')),
 			array('module.add', array('ucp', 'UCP_KARMA', array(
-				'module_basename'	=> 'phpbb_ext_phpbb_karma_ucp_received_karma',
+				'module_basename'	=> '\phpbb\karma\ucp\received_karma',
 				'module_langname'	=> 'UCP_RECEIVED_KARMA',
 				'module_mode'		=> 'overview',
 				'module_auth'		=> '',
@@ -127,19 +127,19 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 			// MCP module
 			array('module.add', array('mcp', '', 'MCP_KARMA')),
 			array('module.add', array('mcp', 'MCP_KARMA', array(
-				'module_basename'	=> 'phpbb_ext_phpbb_karma_mcp_reported_karma',
+				'module_basename'	=> '\phpbb\karma\mcp\reported_karma',
 				'module_langname'	=> 'MCP_KARMA_REPORTS_OPEN',
 				'module_mode'		=> 'reports',
 				'module_auth'		=> 'acl_m_karma_report',
 			))),
 			array('module.add', array('mcp', 'MCP_KARMA', array(
-				'module_basename'	=> 'phpbb_ext_phpbb_karma_mcp_reported_karma',
+				'module_basename'	=> '\phpbb\karma\mcp\reported_karma',
 				'module_langname'	=> 'MCP_KARMA_REPORTS_CLOSED',
 				'module_mode'		=> 'reports_closed',
 				'module_auth'		=> 'acl_m_karma_report',
 			))),
 			array('module.add', array('mcp', 'MCP_KARMA', array(
-				'module_basename'	=> 'phpbb_ext_phpbb_karma_mcp_reported_karma',
+				'module_basename'	=> '\phpbb\karma\mcp\reported_karma',
 				'module_langname'	=> 'MCP_KARMA_REPORT_DETAILS',
 				'module_mode'		=> 'report_details',
 				'module_auth'		=> 'acl_m_karma_report',

@@ -10,12 +10,15 @@
 /**
 * @ignore
 */
+
+namespace phpbb\karma\includes;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_includes_report_model
+class report_model
 {
 	/**
 	* Database object
@@ -50,7 +53,7 @@ class phpbb_ext_phpbb_karma_includes_report_model
 	* @param phpbb_user			$user					User object
 	* @param string				$karma_reports_table	Name of the karma_reports database table
 	*/
-	public function __construct(phpbb_db_driver $db, phpbb_user $user, phpbb_ext_phpbb_karma_includes_manager $karma_manager, $karma_reports_table)
+	public function __construct(\phpbb\db\driver\driver $db, \phpbb\user $user, \phpbb\karma\includes\manager $karma_manager, $karma_reports_table)
 	{
 		$this->db = $db;
 		$this->user = $user;

@@ -10,12 +10,15 @@
 /**
 * @ignore
 */
+
+namespace phpbb\karma\includes;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_includes_manager
+class manager
 {
 	/**
 	* Array that contains all available karma types which are passed via the
@@ -101,7 +104,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 	* @param string						$karma_table		Name of the karma database table
 	* @param string						$karma_types_table	Name of the karma_types database table
 	*/
-	public function __construct($karma_types, phpbb_cache_service $cache, $container, phpbb_db_driver $db, phpbb_event_dispatcher $dispatcher, phpbb_controller_helper $helper, phpbb_user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
+	public function __construct($karma_types, \phpbb\cache\service $cache, $container, \phpbb\db\driver\driver $db, \phpbb\event\dispatcher $dispatcher, \phpbb\controller\helper $helper, \phpbb\user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
 	{
 		$this->karma_types = $karma_types;
 		$this->cache = $cache;
