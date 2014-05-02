@@ -10,11 +10,12 @@
 /**
 * @ignore
 */
+namespace phpbb\karma;
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_ext extends phpbb_extension_base
+class ext extends \phpbb\extension\base
 {
 }

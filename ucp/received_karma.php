@@ -10,12 +10,15 @@
 /**
 * @ignore
 */
+
+namespace phpbb\karma\ucp;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
-class phpbb_ext_phpbb_karma_ucp_received_karma
+class received_karma
 {
 	public function __construct()
 	{

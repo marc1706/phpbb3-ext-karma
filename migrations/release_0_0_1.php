@@ -7,7 +7,9 @@
 *
 */
 
-class phpbb_ext_phpbb_karma_migrations_0_0_1 extends phpbb_db_migration
+namespace phpbb\karma\migrations;
+
+class release_0_0_1 extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
@@ -23,7 +25,7 @@ class phpbb_ext_phpbb_karma_migrations_0_0_1 extends phpbb_db_migration
 
 	static public function depends_on()
 	{
-		return array('phpbb_db_migration_data_310_dev');
+		return array('\phpbb\db\migration\data\v310\dev');
 	}
 
 	public function update_schema()
