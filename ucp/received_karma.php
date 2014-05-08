@@ -7,12 +7,11 @@
 *
 */
 
+namespace phpbb\karma\ucp;
+
 /**
 * @ignore
 */
-
-namespace phpbb\karma\ucp;
-
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -35,6 +34,7 @@ class received_karma
 
 	public function main($id, $mode)
 	{
+		global $phpbb_container;
 		$this->tpl_name = 'ucp_karma_received_karma';
 		$this->page_title = 'UCP_RECEIVED_KARMA';
 
@@ -59,13 +59,16 @@ class received_karma
 
 		// Generate pagination
 		$base_url = $this->u_action;
-		phpbb_generate_template_pagination($this->template, $base_url, 'pagination', 'start', $total, $this->config['topics_per_page'], $start);
+		$pagination = $phpbb_container->get('pagination');
+		$start = $pagination->validate_start($start, $this->config['topics_per_page'], $total);
+
+		$pagination->generate_template_pagination($base_url, 'pagination', 'start', $total, $this->config['topics_per_page'], $start);
 
 		$this->template->assign_vars(array(
 			'L_TITLE'			=> $this->user->lang['UCP_RECEIVED_KARMA'],
 			'S_REPORT_KARMA'	=> true, // TODO make this depend on permissions and perhaps a setting
 
-			'PAGE_NUMBER'			=> phpbb_on_page($this->template, $this->user, $base_url, $total, $this->config['topics_per_page'], $start),
+			'PAGE_NUMBER'			=> $pagination->on_page($base_url, $total, $this->config['topics_per_page'], $start),
 			'TOTAL'					=> $total,
 			'TOTAL_RECEIVED_KARMA'	=> $this->user->lang('LIST_RECEIVED_KARMA', (int) $total),
 		));
