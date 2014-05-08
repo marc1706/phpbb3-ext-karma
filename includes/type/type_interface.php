@@ -7,12 +7,11 @@
 *
 */
 
+namespace phpbb\karma\includes\type;
+
 /**
 * @ignore
 */
-
-namespace phpbb\karma\includes\type;
-
 if (!defined('IN_PHPBB'))
 {
 	exit;

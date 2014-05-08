@@ -7,6 +7,8 @@
 *
 */
 
+namespace phpbb\karma\controller;
+
 /**
 * @ignore
 */
@@ -17,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class phpbb_ext_phpbb_karma_controller_reportkarma
+class reportkarma
 {
 	/**
 	* Container object
