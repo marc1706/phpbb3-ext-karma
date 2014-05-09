@@ -64,3 +64,10 @@ services:
             - @controller.helper
             - %core.root_path%
             - %core.php_ext%
+
+    karma.listener:
+        class: phpbb\karma\event\main_listener
+        arguments:
+            - @user
+        tags:
+            - { name: event.listener }
