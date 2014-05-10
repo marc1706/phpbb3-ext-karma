@@ -76,7 +76,7 @@ class reportkarma
 	* @param string						$phpbb_root_path	phpBB root path
 	* @param string						$php_ext			php file extension
 	*/
-	public function __construct(ContainerBuilder $container, phpbb_request $request, phpbb_template $template, phpbb_user $user, phpbb_controller_helper $helper, $phpbb_root_path, $php_ext)
+	public function __construct(ContainerBuilder $container, \phpbb\request $request, \phpbb\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, $phpbb_root_path, $php_ext)
 	{
 		$this->container = $container;
 		$this->request = $request;

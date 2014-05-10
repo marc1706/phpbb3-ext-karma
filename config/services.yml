@@ -69,5 +69,10 @@ services:
         class: phpbb\karma\event\main_listener
         arguments:
             - @user
+            - @controller.helper
+            - @karma.includes.manager
+            - @karma.includes.report_model
+            - %tables.karma.karma%
+            - %tables.karma.karma_types%
         tags:
             - { name: event.listener }
