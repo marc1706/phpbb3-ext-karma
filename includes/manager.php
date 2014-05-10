@@ -573,7 +573,7 @@ class manager
 	* Helper to get the type class of a certain karma type
 	* 
 	* @param	string	$karma_type_name						The name of the type to get a class instance of
-	* @return	phpbb_ext_phpbb_karma_includes_type_interface	An instance of the corresponding type class
+	* @return	phpbb\ext\phpbb\karma\includes\type\type_interface	An instance of the corresponding type class
 	*/
 	private function get_type_class($karma_type_name)
 	{

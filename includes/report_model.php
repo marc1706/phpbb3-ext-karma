@@ -21,19 +21,19 @@ class report_model
 {
 	/**
 	* Database object
-	* @var phpbb_db_driver
+	* @var phpbb\db\driver
 	*/
 	protected $db;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var phpbb\user
 	*/
 	protected $user;
 
 	/**
 	* Karma manager object
-	* @var phpbb_ext_phpbb_karma_includes_manager
+	* @var phpbb\ext\phpbb\karma\includes\manager
 	*/
 	protected $karma_manager;
 
