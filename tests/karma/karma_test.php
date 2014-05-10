@@ -106,7 +106,7 @@ class phpbb_ext_phpbb_karma_tests_karma_karma_test extends phpbb_ext_phpbb_karma
 		$bogus_karma_type_name_test = $basic_test;
 		$bogus_karma_type_name_test['karma_type_name'] = 'bogus_karma_type';
 
-		// Illegal values (OutOfBoundsException expected)
+		// Illegal values (\OutOfBoundsException expected)
 		// These are all tried individually, with the basic test as a template
 		$too_large_int = pow(2, 32);
 		$illegal_values = array(
@@ -128,7 +128,7 @@ class phpbb_ext_phpbb_karma_tests_karma_karma_test extends phpbb_ext_phpbb_karma
 			foreach ($values as $value)
 			{
 				$template[$field] = $value;
-				$return[] = array($template, 'OutOfBoundsException');
+				$return[] = array($template, '\OutOfBoundsException');
 			}
 		}
 		return $return;

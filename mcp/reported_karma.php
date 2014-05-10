@@ -72,7 +72,7 @@ class reported_karma
 					$karma_report_id = $this->request->variable('r', 0);
 					$karma_report = $report_model->get_karma_report($karma_report_id);
 				}
-				catch (OutOfBoundsException $e)
+				catch (\OutOfBoundsException $e)
 				{
 					trigger_error($e->getMessage());
 				}
@@ -212,7 +212,7 @@ class reported_karma
 			// TODO this probably isn't necessary, though it makes sense to somehow check if the reports exist
 			$karma_reports = $report_model->get_karma_reports($karma_report_id_list);
 		}
-		catch (OutOfBoundsException $e)
+		catch (\OutOfBoundsException $e)
 		{
 			trigger_error($e->getMessage());
 		}

@@ -142,13 +142,13 @@ class manager
 		// Check if the giving user ID exists
 		if (!$this->user_id_exists($giving_user_id))
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		// Check if the karma score is within bounds
 		if ($karma_score < -128 || $karma_score > 127)
 		{
-			throw new OutOfBoundsException('KARMA_SCORE_OUTOFBOUNDS');
+			throw new \OutOfBoundsException('KARMA_SCORE_OUTOFBOUNDS');
 		}
 
 		// Ensure the karma comment isn't too long
@@ -157,7 +157,7 @@ class manager
 		// Validate the karma time and ensure it is set
 		if ($karma_time >= pow(2, 31))
 		{
-			throw new OutOfBoundsException('KARMA_TIME_TOO_LARGE');
+			throw new \OutOfBoundsException('KARMA_TIME_TOO_LARGE');
 		}
 		if ($karma_time < 0)
 		{
@@ -226,7 +226,7 @@ class manager
 		// Check if the giving user ID exists
 		if (!$this->user_id_exists($giving_user_id))
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		// Begin a transaction because we're doing multiple related database operations in a row
@@ -280,7 +280,7 @@ class manager
 
 		if ($user_karma_score === false)
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		return (int) $user_karma_score;
@@ -679,8 +679,8 @@ class manager
 			// TODO giving a full type class name passed the first of these two tests but isn't valid at all otherwise
 			// That very mistake is in the notification system code, too; ask EXreaction
 			{
-				//throw new OutOfBoundsException($this->user->lang('NO_KARMA_TYPE', $karma_type_name));
-				throw new OutOfBoundsException(print_r($this->karma_types, true));
+				//throw new \OutOfBoundsException($this->user->lang('NO_KARMA_TYPE', $karma_type_name));
+				throw new \OutOfBoundsException(print_r($this->karma_types, true));
 			}
 
 			$sql = 'INSERT INTO ' . $this->karma_types_table . ' ' . $this->db->sql_build_array('INSERT', array(

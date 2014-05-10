@@ -38,7 +38,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$topic_id = $this->db->sql_fetchfield('topic_id');
 		$this->db->sql_freeresult($result);
 		if ($topic_id === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, "t=$topic_id&amp;p=$item_id") . "#p$item_id";
@@ -62,7 +62,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$title = $this->db->sql_fetchfield('post_subject');
 		$this->db->sql_freeresult($result);
 		if ($title === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $title;
@@ -90,7 +90,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$author = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		if ($author === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $author;
@@ -114,7 +114,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$last_edit = $this->db->sql_fetchfield('post_edit_time');
 		$this->db->sql_freeresult($result);
 		if ($last_edit === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $last_edit;
@@ -140,7 +140,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$this->db->sql_freeresult($result);
 		if ($forum_id === false)
 		{
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		// Check if the user has read permissions for this post
@@ -167,7 +167,7 @@ class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\inclu
 		$forum_name = $this->db->sql_fetchfield('forum_name');
 		$this->db->sql_freeresult($result);
 		if ($forum_password === false) {
-			throw new OutOfBoundsException('NO_TOPIC');
+			throw new \OutOfBoundsException('NO_TOPIC');
 		}
 
 		// TODO There must be a way to check this without overriding output with a password form
