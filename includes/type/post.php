@@ -9,14 +9,6 @@
 
 namespace phpbb\karma\includes\type;
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\includes\type\type_interface
 {
 	/**

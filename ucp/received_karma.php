@@ -9,14 +9,6 @@
 
 namespace phpbb\karma\ucp;
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 class received_karma
 {
 	public function __construct()

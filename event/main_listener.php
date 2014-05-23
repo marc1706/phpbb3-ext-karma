@@ -10,14 +10,6 @@
 namespace phpbb\karma\event;
 
 /**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
-
-/**
 * Event listener
 */
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

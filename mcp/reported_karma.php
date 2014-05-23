@@ -9,14 +9,6 @@
 
 namespace phpbb\karma\mcp;
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 class reported_karma
 {
 	public function __construct($p_master)

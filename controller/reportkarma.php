@@ -9,14 +9,6 @@
 
 namespace phpbb\karma\controller;
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class reportkarma

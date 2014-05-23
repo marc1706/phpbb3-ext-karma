@@ -9,14 +9,6 @@
 
 namespace phpbb\karma\includes;
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 class manager
 {
 	/**
