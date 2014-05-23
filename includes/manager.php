@@ -28,7 +28,7 @@ class manager
 
 	/**
 	* Cache object
-	* @var phpbb_cache_service
+	* @var \phpbb\cache\service
 	*/
 	private $cache;
 
@@ -40,25 +40,25 @@ class manager
 
 	/**
 	* Database object
-	* @var phpbb_db_driver
+	* @var \phpbb\db\driver
 	*/
 	private $db;
 
 	/**
 	* Dispatcher object
-	* @var phpbb_event_dispatcher
+	* @var \phpbb\event\dispatcher
 	*/
 	private $dispatcher;
 
 	/**
 	* Controller helper object
-	* @var phpbb_controller_helper
+	* @var \phpbb\controller\helper
 	*/
 	protected $helper;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var \phpbb\user
 	*/
 	private $user;
 

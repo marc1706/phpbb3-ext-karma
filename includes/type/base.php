@@ -21,19 +21,19 @@ class base
 {
 	/**
 	* Authentication object
-	* @var phpbb_auth
+	* @var \phpbb\auth
 	*/
 	protected $auth;
 
 	/**
 	* Database object
-	* @var phpbb_db_driver
+	* @var \phpbb\db\driver
 	*/
 	protected $db;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var \phpbb\user
 	*/
 	protected $user;
 

@@ -44,25 +44,25 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	* User object
-	* @var phpbb\user
+	* @var \phpbb\user
 	*/
 	protected $user;
 
 	/**
 	* Controller helper object
-	* @var phpbb\controller\helper
+	* @var \phpbb\controller\helper
 	*/
 	protected $helper;
 
 	/**
 	* Karma manager object
-	* @var phpbb\karma\includes\manager
+	* @var \phpbb\karma\includes\manager
 	*/
 	protected $karma_manager;
 
 	/**
 	* Karma manager object
-	* @var phpbb\karma\includes\report_model
+	* @var \phpbb\karma\includes\report_model
 	*/
 	protected $karma_report_model;
 

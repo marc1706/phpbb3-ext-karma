@@ -29,25 +29,25 @@ class reportkarma
 
 	/**
 	* Request object
-	* @var phpbb_request
+	* @var \phpbb\request
 	*/
 	protected $request;
 
 	/**
 	* Template object
-	* @var phpbb_template
+	* @var \phpbb\template
 	*/
 	protected $template;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var \phpbb\user
 	*/
 	protected $user;
 
 	/**
 	* Controller helper object
-	* @var phpbb_controller_helper
+	* @var \phpbb\controller\helper
 	*/
 	protected $helper;
 
