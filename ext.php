@@ -11,6 +11,7 @@
 * @ignore
 */
 namespace phpbb\karma;
+
 if (!defined('IN_PHPBB'))
 {
 	exit;

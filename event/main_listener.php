@@ -131,11 +131,11 @@ class main_listener implements EventSubscriberInterface
 			),
 			'ON'	=> "karma.karma_type_id = (
 							SELECT karma_type_id
-							FROM $this->karma_types_table
+							FROM {$this->karma_types_table}
 							WHERE karma_type_name = 'post'
 						)
 						AND karma.item_id = p.post_id
-						AND karma.giving_user_id =" . (int) $this->user->data['user_id'],
+						AND karma.giving_user_id = {(int) $this->user->data['user_id']}",
 						// TODO that 'post' type probably shouldn't be hardcoded. Perhaps a definition somewhere?
 						// TODO this could be done using a cross join if only the LEFT_JOIN sub-array supported that
 		);
