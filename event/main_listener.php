@@ -53,22 +53,33 @@ class main_listener implements EventSubscriberInterface
 	protected $karma_manager;
 
 	/**
-	* Karma manager object
+	* Karma report model object
 	* @var \phpbb\karma\includes\report_model
 	*/
 	protected $karma_report_model;
 
 	/**
-	* Name of the karma_reports database table
+	* Name of the karma database table
 	* @var string
 	*/
 	protected $karma_table;
 
 	/**
-	* Name of the karma_reports database table
+	* Name of the karma_types database table
 	* @var string
 	*/
 	protected $karma_types_table;
+
+	/**
+	* Constructor
+	*
+	* @param \phpbb\user							$user					User object
+	* @param \phpbb\controller\helper				$helper					Controller helper object
+	* @param \phpbb\karma\includes\manager			$karma_manager			Karma manager object
+	* @param \phpbb\karma\includes\report_model		$karma_report_model		Karma report model object
+	* @param string									$karma_table			Name of karma database table
+	* @param string									$karma_types_table		Name of karma_types database table
+	*/
 
 	public function __construct(\phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\karma\includes\manager $karma_manager, \phpbb\karma\includes\report_model $karma_report_model, $karma_table, $karma_types_table)
 	{
