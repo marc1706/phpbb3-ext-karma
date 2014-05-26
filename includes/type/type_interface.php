@@ -7,15 +7,9 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\includes\type;
 
-interface phpbb_ext_phpbb_karma_includes_type_interface
+interface type_interface
 {
 	/**
 	* Get the url of the specified item

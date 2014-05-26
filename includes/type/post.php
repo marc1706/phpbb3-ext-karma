@@ -7,15 +7,9 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\includes\type;
 
-class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_includes_type_base implements phpbb_ext_phpbb_karma_includes_type_interface
+class post extends \phpbb\karma\includes\type\base implements \phpbb\karma\includes\type\type_interface
 {
 	/**
 	* Get the url of the specified item
@@ -36,7 +30,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$topic_id = $this->db->sql_fetchfield('topic_id');
 		$this->db->sql_freeresult($result);
 		if ($topic_id === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return append_sid($this->phpbb_root_path . 'viewtopic.' . $this->php_ext, "t=$topic_id&amp;p=$item_id") . "#p$item_id";
@@ -60,7 +54,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$title = $this->db->sql_fetchfield('post_subject');
 		$this->db->sql_freeresult($result);
 		if ($title === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $title;
@@ -88,7 +82,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$author = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		if ($author === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $author;
@@ -112,7 +106,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$last_edit = $this->db->sql_fetchfield('post_edit_time');
 		$this->db->sql_freeresult($result);
 		if ($last_edit === false) {
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		return $last_edit;
@@ -138,7 +132,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$this->db->sql_freeresult($result);
 		if ($forum_id === false)
 		{
-			throw new OutOfBoundsException('NO_POST');
+			throw new \OutOfBoundsException('NO_POST');
 		}
 
 		// Check if the user has read permissions for this post
@@ -165,7 +159,7 @@ class phpbb_ext_phpbb_karma_includes_type_post extends phpbb_ext_phpbb_karma_inc
 		$forum_name = $this->db->sql_fetchfield('forum_name');
 		$this->db->sql_freeresult($result);
 		if ($forum_password === false) {
-			throw new OutOfBoundsException('NO_TOPIC');
+			throw new \OutOfBoundsException('NO_TOPIC');
 		}
 
 		// TODO There must be a way to check this without overriding output with a password form

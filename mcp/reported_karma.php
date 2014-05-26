@@ -7,15 +7,9 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\mcp;
 
-class phpbb_ext_phpbb_karma_mcp_reported_karma
+class reported_karma
 {
 	public function __construct($p_master)
 	{
@@ -39,7 +33,7 @@ class phpbb_ext_phpbb_karma_mcp_reported_karma
 
 	public function main($id, $mode)
 	{
-		global $action; // TODO is using the global $action ok?
+		global $action, $phpbb_container; // TODO is using the global $action ok?
 
 		$this->page_title = 'MCP_REPORTED_KARMA';
 
@@ -70,7 +64,7 @@ class phpbb_ext_phpbb_karma_mcp_reported_karma
 					$karma_report_id = $this->request->variable('r', 0);
 					$karma_report = $report_model->get_karma_report($karma_report_id);
 				}
-				catch (OutOfBoundsException $e)
+				catch (\OutOfBoundsException $e)
 				{
 					trigger_error($e->getMessage());
 				}
@@ -178,7 +172,10 @@ class phpbb_ext_phpbb_karma_mcp_reported_karma
 
 				// Generate pagination
 				$base_url = $this->u_action;
-				phpbb_generate_template_pagination($this->template, $base_url, 'pagination', 'start', $total, $this->config['topics_per_page'], $start);
+				$pagination = $phpbb_container->get('pagination');
+				$start = $pagination->validate_start($start, $this->config['topics_per_page'], $total);
+
+				$pagination->generate_template_pagination($base_url, 'pagination', 'start', $total, $this->config['topics_per_page'], $start);
 
 				$this->template->assign_vars(array(
 					'L_EXPLAIN'				=> ($mode == 'reports') ? $this->user->lang['MCP_KARMA_REPORTS_OPEN_EXPLAIN'] : $this->user->lang['MCP_KARMA_REPORTS_CLOSED_EXPLAIN'],
@@ -187,7 +184,7 @@ class phpbb_ext_phpbb_karma_mcp_reported_karma
 					'S_MCP_ACTION'			=> $this->u_action,
 					'S_CLOSED'				=> $closed,
 
-					'PAGE_NUMBER'			=> phpbb_on_page($this->template, $this->user, $base_url, $total, $this->config['topics_per_page'], $start),
+					'PAGE_NUMBER'			=> $pagination->on_page($base_url, $total, $this->config['topics_per_page'], $start),
 					'TOTAL'					=> $total,
 					'TOTAL_KARMA_REPORTS'	=> $this->user->lang('LIST_KARMA_REPORTS', (int) $total),
 					)
@@ -207,7 +204,7 @@ class phpbb_ext_phpbb_karma_mcp_reported_karma
 			// TODO this probably isn't necessary, though it makes sense to somehow check if the reports exist
 			$karma_reports = $report_model->get_karma_reports($karma_report_id_list);
 		}
-		catch (OutOfBoundsException $e)
+		catch (\OutOfBoundsException $e)
 		{
 			trigger_error($e->getMessage());
 		}

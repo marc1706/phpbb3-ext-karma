@@ -7,20 +7,14 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
+namespace phpbb\karma\event;
 
 /**
 * Event listener
 */
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterface
+class main_listener implements EventSubscriberInterface
 {
 	static public function getSubscribedEvents()
 	{
@@ -38,6 +32,63 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 			// Extension events
 			'ext_phpbb_karma.delete_karma_before'	=> 'delete_karma_reports_when_karma_is_deleted',
 		);
+	}
+
+	/**
+	* User object
+	* @var \phpbb\user
+	*/
+	protected $user;
+
+	/**
+	* Controller helper object
+	* @var \phpbb\controller\helper
+	*/
+	protected $helper;
+
+	/**
+	* Karma manager object
+	* @var \phpbb\karma\includes\manager
+	*/
+	protected $karma_manager;
+
+	/**
+	* Karma report model object
+	* @var \phpbb\karma\includes\report_model
+	*/
+	protected $karma_report_model;
+
+	/**
+	* Name of the karma database table
+	* @var string
+	*/
+	protected $karma_table;
+
+	/**
+	* Name of the karma_types database table
+	* @var string
+	*/
+	protected $karma_types_table;
+
+	/**
+	* Constructor
+	*
+	* @param \phpbb\user							$user					User object
+	* @param \phpbb\controller\helper				$helper					Controller helper object
+	* @param \phpbb\karma\includes\manager			$karma_manager			Karma manager object
+	* @param \phpbb\karma\includes\report_model		$karma_report_model		Karma report model object
+	* @param string									$karma_table			Name of karma database table
+	* @param string									$karma_types_table		Name of karma_types database table
+	*/
+
+	public function __construct(\phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\karma\includes\manager $karma_manager, \phpbb\karma\includes\report_model $karma_report_model, $karma_table, $karma_types_table)
+	{
+		$this->user = $user;
+		$this->helper = $helper;
+		$this->karma_manager = $karma_manager;
+		$this->karma_report_model = $karma_report_model;
+		$this->karma_table = $karma_table;
+		$this->karma_types_table = $karma_types_table;
 	}
 
 	public function add_permissions($event)
@@ -70,12 +121,7 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 
 	public function viewtopic_body_retrieve_given_karma_with_posts($event)
 	{
-		global $user, $phpbb_container;
-
-		$karma_table = $phpbb_container->getParameter('tables.karma.karma');
-		$karma_types_table = $phpbb_container->getParameter('tables.karma.karma_types');
-
-		// Extend the post information retrieval query to retrieve any karma given by $user on any of the posts
+		// Extend the post information retrieval query to retrieve any karma given by $this->user on any of the posts
 		$sql_ary = $event['sql_ary'];
 		$sql_ary['SELECT'] .= ', karma.karma_score, karma.karma_comment';
 		if (!isset($sql_ary['LEFT_JOIN']))
@@ -84,15 +130,15 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 		}
 		$sql_ary['LEFT_JOIN'][] = array(
 			'FROM'	=> array(
-				$karma_table		=> 'karma',
+				$this->karma_table		=> 'karma',
 			),
 			'ON'	=> "karma.karma_type_id = (
 							SELECT karma_type_id
-							FROM $karma_types_table
+							FROM {$this->karma_types_table}
 							WHERE karma_type_name = 'post'
 						)
 						AND karma.item_id = p.post_id
-						AND karma.giving_user_id =" . (int) $user->data['user_id'],
+						AND karma.giving_user_id = {(int) $this->user->data['user_id']}",
 						// TODO that 'post' type probably shouldn't be hardcoded. Perhaps a definition somewhere?
 						// TODO this could be done using a cross join if only the LEFT_JOIN sub-array supported that
 		);
@@ -122,28 +168,20 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 
 	public function viewtopic_body_postrow_add_karma_score_and_controls($event)
 	{
-		global $phpbb_container, $user, $phpbb_root_path, $phpEx;
-
 		if ($event['row']['user_id'] != ANONYMOUS)
 		{
 			// Load the karma language file
-			$user->add_lang_ext('phpbb/karma', 'karma');
-
-			// Get the karma manager to format the karma score
-			$karma_manager = $phpbb_container->get('karma.includes.manager');
+			$this->user->add_lang_ext('phpbb/karma', 'karma');
 
 			// Add the user's karma score to the template
 			$post_row = $event['post_row'];
-			$post_row['POSTER_KARMA_SCORE'] = $karma_manager->format_karma_score($event['user_poster_data']['karma_score']);
+			$post_row['POSTER_KARMA_SCORE'] = $this->karma_manager->format_karma_score($event['user_poster_data']['karma_score']);
 
-			if ($event['row']['user_id'] != $user->data['user_id'])
+			if ($event['row']['user_id'] != $this->user->data['user_id'])
 			{
-				// Get the controller helper for generating the URLs
-				$helper = $phpbb_container->get('controller.helper');
-
 				// Add the URLs for the karma controls (thumbs up/down)
-				$post_row['U_GIVEKARMA_POSITIVE'] = $helper->url("givekarma/post/{$event['row']['post_id']}", 'score=positive');
-				$post_row['U_GIVEKARMA_NEGATIVE'] = $helper->url("givekarma/post/{$event['row']['post_id']}", 'score=negative');
+				$post_row['U_GIVEKARMA_POSITIVE'] = $this->helper->url("givekarma/post/{$event['row']['post_id']}", 'score=positive');
+				$post_row['U_GIVEKARMA_NEGATIVE'] = $this->helper->url("givekarma/post/{$event['row']['post_id']}", 'score=negative');
 
 				// Add a description if the user already gave karma on this post
 				if (isset($event['row']['karma_score']) && $event['row']['karma_score'] != 0)
@@ -154,8 +192,8 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 						: 'S_GIVEN_KARMA_NEGATIVE'
 					] = true;
 					$post_row['GIVEN_KARMA_DESC'] = sprintf(
-						$user->lang['GIVEN_KARMA_DESC'],
-						$karma_manager->format_karma_score($event['row']['karma_score']),
+						$this->user->lang['GIVEN_KARMA_DESC'],
+						$this->karma_manager->format_karma_score($event['row']['karma_score']),
 						$event['row']['karma_comment']
 					);
 				}
@@ -166,41 +204,28 @@ class phpbb_ext_phpbb_karma_event_main_listener implements EventSubscriberInterf
 
 	public function ucp_pm_viewmessage_add_pm_author_karma_score($event)
 	{
-		global $phpbb_container, $user;
-
 		// Load the karma language file
-		$user->add_lang_ext('phpbb/karma', 'karma');
-
-		// Get the karma manager to format the karma score
-		$karma_manager = $phpbb_container->get('karma.includes.manager');
+		$this->user->add_lang_ext('phpbb/karma', 'karma');
 
 		// Add the karma score to the template variables
 		$msg_data = $event['msg_data'];
-		$msg_data['AUTHOR_KARMA_SCORE'] = $karma_manager->format_karma_score($event['message_row']['user_karma_score']);
+		$msg_data['AUTHOR_KARMA_SCORE'] = $this->karma_manager->format_karma_score($event['message_row']['user_karma_score']);
 		$event['msg_data'] = $msg_data;
 	}
 
 	public function memberlist_view_add_karma_score_to_user_statistics($event)
 	{
-		global $phpbb_container, $user;
-
 		// Load the karma language file
-		$user->add_lang_ext('phpbb/karma', 'karma');
-
-		// Get the karma manager to format the karma score
-		$karma_manager = $phpbb_container->get('karma.includes.manager');
+		$this->user->add_lang_ext('phpbb/karma', 'karma');
 
 		// Add the karma score to the template variables
 		$template_data = $event['template_data'];
-		$template_data['USER_KARMA_SCORE'] = $karma_manager->format_karma_score($event['data']['user_karma_score']);
+		$template_data['USER_KARMA_SCORE'] = $this->karma_manager->format_karma_score($event['data']['user_karma_score']);
 		$event['template_data'] = $template_data;
 	}
 
 	public function delete_karma_reports_when_karma_is_deleted($event)
 	{
-		global $phpbb_container;
-
-		$report_model = $phpbb_container->get('karma.includes.report_model');
-		$report_model->delete_karma_reports_by_karma_ids($event['karma_id_list'], false);
+		$this->karma_report_model->delete_karma_reports_by_karma_ids($event['karma_id_list'], false);
 	}
 }

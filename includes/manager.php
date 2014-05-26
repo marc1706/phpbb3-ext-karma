@@ -7,15 +7,9 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\includes;
 
-class phpbb_ext_phpbb_karma_includes_manager
+class manager
 {
 	/**
 	* Array that contains all available karma types which are passed via the
@@ -26,7 +20,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 
 	/**
 	* Cache object
-	* @var phpbb_cache_service
+	* @var \phpbb\cache\service
 	*/
 	private $cache;
 
@@ -38,25 +32,25 @@ class phpbb_ext_phpbb_karma_includes_manager
 
 	/**
 	* Database object
-	* @var phpbb_db_driver
+	* @var \phpbb\db\driver
 	*/
 	private $db;
 
 	/**
 	* Dispatcher object
-	* @var phpbb_event_dispatcher
+	* @var \phpbb\event\dispatcher
 	*/
 	private $dispatcher;
 
 	/**
 	* Controller helper object
-	* @var phpbb_controller_helper
+	* @var \phpbb\controller\helper
 	*/
 	protected $helper;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var \phpbb\user
 	*/
 	private $user;
 
@@ -101,7 +95,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 	* @param string						$karma_table		Name of the karma database table
 	* @param string						$karma_types_table	Name of the karma_types database table
 	*/
-	public function __construct($karma_types, phpbb_cache_service $cache, $container, phpbb_db_driver $db, phpbb_event_dispatcher $dispatcher, phpbb_controller_helper $helper, phpbb_user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
+	public function __construct($karma_types, \phpbb\cache\service $cache, $container, \phpbb\db\driver\driver $db, \phpbb\event\dispatcher $dispatcher, \phpbb\controller\helper $helper, \phpbb\user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
 	{
 		$this->karma_types = $karma_types;
 		$this->cache = $cache;
@@ -140,13 +134,13 @@ class phpbb_ext_phpbb_karma_includes_manager
 		// Check if the giving user ID exists
 		if (!$this->user_id_exists($giving_user_id))
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		// Check if the karma score is within bounds
 		if ($karma_score < -128 || $karma_score > 127)
 		{
-			throw new OutOfBoundsException('KARMA_SCORE_OUTOFBOUNDS');
+			throw new \OutOfBoundsException('KARMA_SCORE_OUTOFBOUNDS');
 		}
 
 		// Ensure the karma comment isn't too long
@@ -155,7 +149,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 		// Validate the karma time and ensure it is set
 		if ($karma_time >= pow(2, 31))
 		{
-			throw new OutOfBoundsException('KARMA_TIME_TOO_LARGE');
+			throw new \OutOfBoundsException('KARMA_TIME_TOO_LARGE');
 		}
 		if ($karma_time < 0)
 		{
@@ -224,7 +218,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 		// Check if the giving user ID exists
 		if (!$this->user_id_exists($giving_user_id))
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		// Begin a transaction because we're doing multiple related database operations in a row
@@ -278,7 +272,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 
 		if ($user_karma_score === false)
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		return (int) $user_karma_score;
@@ -571,7 +565,7 @@ class phpbb_ext_phpbb_karma_includes_manager
 	* Helper to get the type class of a certain karma type
 	* 
 	* @param	string	$karma_type_name						The name of the type to get a class instance of
-	* @return	phpbb_ext_phpbb_karma_includes_type_interface	An instance of the corresponding type class
+	* @return	phpbb\ext\phpbb\karma\includes\type\type_interface	An instance of the corresponding type class
 	*/
 	private function get_type_class($karma_type_name)
 	{
@@ -677,8 +671,8 @@ class phpbb_ext_phpbb_karma_includes_manager
 			// TODO giving a full type class name passed the first of these two tests but isn't valid at all otherwise
 			// That very mistake is in the notification system code, too; ask EXreaction
 			{
-				//throw new OutOfBoundsException($this->user->lang('NO_KARMA_TYPE', $karma_type_name));
-				throw new OutOfBoundsException(print_r($this->karma_types, true));
+				//throw new \OutOfBoundsException($this->user->lang('NO_KARMA_TYPE', $karma_type_name));
+				throw new \OutOfBoundsException(print_r($this->karma_types, true));
 			}
 
 			$sql = 'INSERT INTO ' . $this->karma_types_table . ' ' . $this->db->sql_build_array('INSERT', array(

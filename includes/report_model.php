@@ -7,31 +7,25 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\includes;
 
-class phpbb_ext_phpbb_karma_includes_report_model
+class report_model
 {
 	/**
 	* Database object
-	* @var phpbb_db_driver
+	* @var phpbb\db\driver
 	*/
 	protected $db;
 
 	/**
 	* User object
-	* @var phpbb_user
+	* @var phpbb\user
 	*/
 	protected $user;
 
 	/**
 	* Karma manager object
-	* @var phpbb_ext_phpbb_karma_includes_manager
+	* @var phpbb\ext\phpbb\karma\includes\manager
 	*/
 	protected $karma_manager;
 
@@ -50,7 +44,7 @@ class phpbb_ext_phpbb_karma_includes_report_model
 	* @param phpbb_user			$user					User object
 	* @param string				$karma_reports_table	Name of the karma_reports database table
 	*/
-	public function __construct(phpbb_db_driver $db, phpbb_user $user, phpbb_ext_phpbb_karma_includes_manager $karma_manager, $karma_reports_table)
+	public function __construct(\phpbb\db\driver\driver $db, \phpbb\user $user, \phpbb\karma\includes\manager $karma_manager, $karma_reports_table)
 	{
 		$this->db = $db;
 		$this->user = $user;
@@ -73,13 +67,13 @@ class phpbb_ext_phpbb_karma_includes_report_model
 		$karma_row = $this->karma_manager->get_karma_row($karma_id);
 		if ($karma_row === false)
 		{
-			throw new OutOfBoundsException('NO_KARMA');
+			throw new \OutOfBoundsException('NO_KARMA');
 		}
 
 		// Check the reporter_id
 		if (!$this->user_id_exists($reporter_id))
 		{
-			throw new OutOfBoundsException('NO_USER');
+			throw new \OutOfBoundsException('NO_USER');
 		}
 
 		// Ensure the report text isn't too long
@@ -88,7 +82,7 @@ class phpbb_ext_phpbb_karma_includes_report_model
 		// Validate the karma report time and ensure it is set
 		if ($karma_report_time >= pow(2, 31))
 		{
-			throw new OutOfBoundsException('KARMA_REPORT_TIME_TOO_LARGE');
+			throw new \OutOfBoundsException('KARMA_REPORT_TIME_TOO_LARGE');
 		}
 		if ($karma_report_time < 0)
 		{
@@ -153,7 +147,7 @@ class phpbb_ext_phpbb_karma_includes_report_model
 
 		if (empty($karma_reports))
 		{
-			throw new OutOfBoundsException('NO_KARMA_REPORT');
+			throw new \OutOfBoundsException('NO_KARMA_REPORT');
 		}
 
 		return $karma_reports;
@@ -201,7 +195,7 @@ class phpbb_ext_phpbb_karma_includes_report_model
 		// TODO is not throwing an exception the right way?
 // 		if (empty($karma_reports))
 // 		{
-// 			throw new OutOfBoundsException('NO_KARMA_REPORT');
+// 			throw new \OutOfBoundsException('NO_KARMA_REPORT');
 // 		}
 
 		return array(

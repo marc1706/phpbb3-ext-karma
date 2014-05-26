@@ -7,17 +7,11 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
+namespace phpbb\karma\controller;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class phpbb_ext_phpbb_karma_controller_givekarma
+class givekarma
 {
 	/**
 	* Auth object
