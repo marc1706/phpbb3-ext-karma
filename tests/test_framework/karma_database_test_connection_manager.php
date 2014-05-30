@@ -7,17 +7,19 @@
 *
 */
 
-class phpbb_ext_phpbb_karma_database_test_connection_manager extends phpbb_database_test_connection_manager
+namespace phpbb\karma\tests\test_framework;
+
+class karma_database_test_connection_manager extends \phpbb_database_test_connection_manager
 {
-	public function load_schema()
+	public function load_schema($db)
 	{
 		// Load the phpBB schema's
-		parent::load_schema();
+		parent::load_schema($db);
 
 		$this->ensure_connected(__METHOD__);
 
 		$directory = dirname(__FILE__) . '/../schemas/';
-		$this->load_schema_from_file($directory);
+		$this->load_schema_from_file($directory, $db);
 
 	}
 }

@@ -7,7 +7,9 @@
 *
 */
 
-class phpbb_ext_phpbb_karma_tests_base_db_test extends phpbb_ext_phpbb_karma_database_test_case
+namespace phpbb\karma\tests;
+
+class base_db_test extends \phpbb\karma\tests\test_framework\karma_database_test_case
 {
 	public function getDataSet()
 	{

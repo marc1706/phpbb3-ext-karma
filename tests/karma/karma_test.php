@@ -7,11 +7,13 @@
 *
 */
 
+namespace phpbb\karma\tests\karma;
+
 // Include these files to make truncate_string() work in includes/manager.php
 require_once(dirname(__FILE__) . '/../../../../../includes/utf/utf_tools.php');
 require_once(dirname(__FILE__) . '/../../../../../includes/functions_content.php');
 
-class phpbb_ext_phpbb_karma_tests_karma_karma_test extends phpbb_ext_phpbb_karma_database_test_case
+class karma_test extends \phpbb\karma\tests\test_framework\karma_database_test_case
 {
 	public function getDataSet()
 	{
@@ -26,29 +28,29 @@ class phpbb_ext_phpbb_karma_tests_karma_karma_test extends phpbb_ext_phpbb_karma
 
 		parent::setUp();
 
-		$this->config = new phpbb_config(array());
-		$this->cache = new phpbb_cache_service(
-			new phpbb_cache_driver_null(),
+		$this->config = new \phpbb\config\config(array());
+		$this->cache = new \phpbb\cache\service(
+			new \phpbb\cache\driver\null(),
 			$this->config,
 			$this->db,
 			$phpbb_root_path,
 			$phpEx
 		);
-		$this->container = new phpbb_mock_container_builder();
-		$this->dispatcher = new phpbb_event_dispatcher($this->container);
-		$this->user = new phpbb_user();
+		$this->container = new \phpbb_mock_container_builder();
+		$this->dispatcher = new \phpbb\event\dispatcher($this->container);
+		$this->user = new \phpbb\user();
 
-		$this->phpbb_filesystem = new phpbb_filesystem(
-			new phpbb_symfony_request(
-				new phpbb_mock_request()
+		$this->phpbb_filesystem = new \phpbb\filesystem(
+			new \phpbb\symfony_request(
+				new \phpbb_mock_request()
 			),
 			$phpbb_root_path,
 			$phpEx
 		);
-		$this->template = new phpbb_template_twig($this->phpbb_filesystem, $this->config, $this->user, new phpbb_template_context());
-		$this->helper = new phpbb_controller_helper($this->template, $this->user, $this->config, '', 'php');
+		$this->template = new \phpbb\template\twig\twig($this->phpbb_filesystem, $this->config, $this->user, new \phpbb\template\context());
+		$this->helper = new \phpbb\controller\helper($this->template, $this->user, $this->config, '', 'php');
 
-		$this->karma_manager = new phpbb_ext_phpbb_karma_includes_manager(
+		$this->karma_manager = new \phpbb\karma\includes\manager(
 			array('karma.type.post' => array()),
 			$this->cache,
 			$this->container,
@@ -64,8 +66,8 @@ class phpbb_ext_phpbb_karma_tests_karma_karma_test extends phpbb_ext_phpbb_karma
 
 		$this->container->set(
 			'karma.type.post',
-			new phpbb_ext_phpbb_karma_includes_type_post(
-				new phpbb_mock_karma_auth(), $this->db, $this->user, $phpbb_root_path, $phpEx, 'phpbb_karma'
+			new \phpbb\karma\includes\type\post(
+				new \phpbb_mock_karma_auth(), $this->db, $this->user, $phpbb_root_path, $phpEx, 'phpbb_karma'
 			)
 		);
 	}

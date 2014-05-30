@@ -7,7 +7,9 @@
 *
 */
 
-class phpbb_ext_phpbb_karma_tests_base_test extends phpbb_ext_phpbb_karma_test_case
+namespace phpbb\karma\tests;
+
+class base_test extends \phpbb\karma\tests\test_framework\karma_test_case
 {
 	public function test_true()
 	{
