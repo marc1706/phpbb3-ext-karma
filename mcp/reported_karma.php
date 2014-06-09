@@ -124,8 +124,8 @@ class reported_karma
 					'KARMA_REPORT_TEXT'				=> nl2br($karma_report['karma_report_text']),
 					'KARMA_REPORT_ID'				=> $karma_report['karma_report_id'],
 					'S_KARMA_REPORT_CLOSED'			=> $karma_report['karma_report_closed'],
-					'U_KARMA_EDIT'					=> ($this->auth->acl_get('m_karma_edit')) ? $this->helper->url("givekarma/{$karma_row['karma_type_name']}/{$karma_row['item_id']}", "giver={$karma_row['giving_user_id']}") : '',
-					'U_KARMA_DELETE'				=> ($this->auth->acl_get('m_karma_delete')) ? $this->helper->url("givekarma/{$karma_row['karma_type_name']}/{$karma_row['item_id']}", "giver={$karma_row['giving_user_id']}&amp;delete") : '',
+					'U_KARMA_EDIT'					=> ($this->auth->acl_get('m_karma_edit')) ? $this->helper->route('karma_givekarma_controller', array('karma_type_name' => $karma_row['karma_type_name'], 'item_id' => $karma_row['item_id'], 'giver' => $karma_row['giving_user_id'])) : '',
+					'U_KARMA_DELETE'				=> ($this->auth->acl_get('m_karma_delete')) ? $this->helper->route('karma_givekarma_controller', array('karma_type_name' => $karma_row['karma_type_name'], 'item_id' => $karma_row['item_id'], 'giver' => $karma_row['giving_user_id'], 'delete' => '')) : '',
 				));
 
 				$this->tpl_name = 'mcp_karma_report_details';
