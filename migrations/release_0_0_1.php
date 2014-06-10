@@ -144,6 +144,15 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 				'module_mode'		=> 'report_details',
 				'module_auth'		=> 'acl_m_karma_report',
 			))),
+
+			// ACP module
+			array('module.add', array('acp', 'ACP_CAT_DOT_MODS', 'ACP_KARMA')),
+			array('module.add', array('acp', 'ACP_KARMA', array(
+				'module_basename'	=> '\phpbb\karma\acp\main_module',
+				'module_langname'	=> 'ACP_KARMA_HISTORY',
+				'module_mode'		=> 'history',
+				'module_auth'		=> 'acl_a_viewlogs',
+			))),
 		);
 	}
 
