@@ -138,7 +138,7 @@ class main_listener implements EventSubscriberInterface
 							WHERE karma_type_name = 'post'
 						)
 						AND karma.item_id = p.post_id
-						AND karma.giving_user_id = {(int) $this->user->data['user_id']}",
+						AND karma.giving_user_id = " . (int) $this->user->data['user_id'],
 						// TODO that 'post' type probably shouldn't be hardcoded. Perhaps a definition somewhere?
 						// TODO this could be done using a cross join if only the LEFT_JOIN sub-array supported that
 		);
@@ -180,8 +180,8 @@ class main_listener implements EventSubscriberInterface
 			if ($event['row']['user_id'] != $this->user->data['user_id'])
 			{
 				// Add the URLs for the karma controls (thumbs up/down)
-				$post_row['U_GIVEKARMA_POSITIVE'] = $this->helper->url("givekarma/post/{$event['row']['post_id']}", 'score=positive');
-				$post_row['U_GIVEKARMA_NEGATIVE'] = $this->helper->url("givekarma/post/{$event['row']['post_id']}", 'score=negative');
+				$post_row['U_GIVEKARMA_POSITIVE'] = $this->helper->route("karma_givekarma_controller", array('karma_type_name' => 'post', 'item_id' => $event['row']['post_id'], 'score' => 'positive'));
+				$post_row['U_GIVEKARMA_NEGATIVE'] = $this->helper->route("karma_givekarma_controller", array('karma_type_name' => 'post', 'item_id' => $event['row']['post_id'], 'score' => 'negative'));
 
 				// Add a description if the user already gave karma on this post
 				if (isset($event['row']['karma_score']) && $event['row']['karma_score'] != 0)

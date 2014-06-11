@@ -5,7 +5,7 @@
 	"homepage": "https://github.com/rechosen/phpbb3-ext-karma",
 	"version": "0.0.1",
 	"time": "2013-06-25",
-	"licence": "GPL-2.0",
+	"license": "GPL-2.0",
 	"authors": [{
 		"name": "Jesse Feddema",
 		"email": "jdfeddema@gmail.com",

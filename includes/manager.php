@@ -421,7 +421,7 @@ class manager
 			'given_by'			=> get_username_string('full', $karma_row['giving_user_id'], $karma_row['giving_username'], $karma_row['giving_user_colour']),
 			'comment'			=> $karma_row['karma_comment'],
 			'reported'			=> (bool) $karma_row['karma_reported'],
-			'report_url'		=> $this->helper->url("reportkarma/{$karma_row['karma_id']}"),
+			'report_url'		=> $this->helper->route('karma_reportkarma_controller', array('karma_id' => $karma_row['karma_id'])),
 			'item_last_edit'	=> $karma_type->get_last_edit($karma_row['item_id']),
 			'receiving_user_id'	=> $karma_row['receiving_user_id'],
 		);

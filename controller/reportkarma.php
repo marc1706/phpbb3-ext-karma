@@ -68,7 +68,7 @@ class reportkarma
 	* @param string						$phpbb_root_path	phpBB root path
 	* @param string						$php_ext			php file extension
 	*/
-	public function __construct(ContainerBuilder $container, \phpbb\request $request, \phpbb\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, $phpbb_root_path, $php_ext)
+	public function __construct(ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, $phpbb_root_path, $php_ext)
 	{
 		$this->container = $container;
 		$this->request = $request;
@@ -126,7 +126,7 @@ class reportkarma
 			if (empty($error))
 			{
 				// Show the success page and redirect after three seconds
-				$redirect = append_sid("{$this->phpbb_root_path}ucp.{$this->php_ext}", 'i=phpbb\karma\ucp\received_karma&amp;mode=overview');
+				$redirect = append_sid("{$this->phpbb_root_path}ucp.{$this->php_ext}", 'i=\phpbb\karma\ucp\received_karma&amp;mode=overview');
 				meta_refresh(3, $redirect);
 				$message = $this->user->lang['KARMA_SUCCESSFULLY_REPORTED'] . '<br /><br />' . sprintf($this->user->lang['RETURN_PAGE'], "<a href=\"$redirect\">", '</a>');
 				// TODO generation of <a>'s is inconsistent right now; sometimes the template does it, and sometimes the sprintf
