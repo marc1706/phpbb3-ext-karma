@@ -102,6 +102,23 @@ class main_module
 							}
 							$where_sql = ' WHERE ' . $this->db->sql_in_set('karma_id', $sql_in);
 							unset($sql_in);
+
+							$sql = 'SELECT * FROM ' . KARMA_TABLE . $where_sql;
+							$result = $this->db->sql_query($sql);
+							while ($row = $this->db->sql_fetchrow($result))
+							{
+								$sql = 'UPDATE ' . USERS_TABLE . '
+									SET user_karma_score = user_karma_score - '. ($row['karma_score']) . '
+									WHERE user_id = ' . $row['receiving_user_id'];
+								$this->db->sql_query($sql);
+							}
+						}
+
+						else if ($deleteall)
+						{
+							$sql = 'UPDATE ' . USERS_TABLE . '
+								SET user_karma_score = 0 ';
+							$this->db->sql_query($sql);
 						}
 						$sql = 'DELETE FROM ' . KARMA_TABLE .
 								$where_sql;
