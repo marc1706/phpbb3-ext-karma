@@ -13,7 +13,7 @@ namespace phpbb\karma\tests\karma;
 require_once(dirname(__FILE__) . '/../../../../../includes/utf/utf_tools.php');
 require_once(dirname(__FILE__) . '/../../../../../includes/functions_content.php');
 
-class karma_test extends \phpbb\karma\tests\test_framework\karma_database_test_case
+class karma_test extends \phpbb_database_test_case
 {
 	public function getDataSet()
 	{
@@ -22,12 +22,21 @@ class karma_test extends \phpbb\karma\tests\test_framework\karma_database_test_c
 
 	protected $karma_manager;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
+	static protected function setup_extensions()
+	{
+		return array('phpbb/karma');
+	}
+
 	public function setUp()
 	{
 		global $phpbb_root_path, $phpEx;
 
 		parent::setUp();
 
+		$this->db = $this->new_dbal();
 		$this->config = new \phpbb\config\config(array());
 		$this->cache = new \phpbb\cache\service(
 			new \phpbb\cache\driver\null(),
@@ -36,19 +45,12 @@ class karma_test extends \phpbb\karma\tests\test_framework\karma_database_test_c
 			$phpbb_root_path,
 			$phpEx
 		);
-		$this->container = new \phpbb_mock_container_builder();
+		$this->container = new \phpbb\karma\tests\mock\container_builder();
 		$this->dispatcher = new \phpbb\event\dispatcher($this->container);
-		$this->user = new \phpbb\user();
+		$this->user = new \phpbb\karma\tests\mock\user();
 
-		$this->phpbb_filesystem = new \phpbb\filesystem(
-			new \phpbb\symfony_request(
-				new \phpbb_mock_request()
-			),
-			$phpbb_root_path,
-			$phpEx
-		);
-		$this->template = new \phpbb\template\twig\twig($this->phpbb_filesystem, $this->config, $this->user, new \phpbb\template\context());
-		$this->helper = new \phpbb\controller\helper($this->template, $this->user, $this->config, '', 'php');
+		$this->template = new \phpbb\karma\tests\mock\template();
+		$this->helper = new \phpbb\karma\tests\mock\controller_helper();
 
 		$this->karma_manager = new \phpbb\karma\includes\manager(
 			array('karma.type.post' => array()),
@@ -67,7 +69,7 @@ class karma_test extends \phpbb\karma\tests\test_framework\karma_database_test_c
 		$this->container->set(
 			'karma.type.post',
 			new \phpbb\karma\includes\type\post(
-				new \phpbb_mock_karma_auth(), $this->db, $this->user, $phpbb_root_path, $phpEx, 'phpbb_karma'
+				new \phpbb\karma\tests\mock\karma_auth(), $this->db, $this->user, $phpbb_root_path, $phpEx, 'phpbb_karma'
 			)
 		);
 	}

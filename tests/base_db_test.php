@@ -9,8 +9,18 @@
 
 namespace phpbb\karma\tests;
 
-class base_db_test extends \phpbb\karma\tests\test_framework\karma_database_test_case
+class base_db_test extends \phpbb_database_test_case
 {
+	protected $db;
+
+	public function setUp()
+	{
+		parent::setUp();
+
+		global $db;
+		$db = $this->db = $this->new_dbal();
+	}
+
 	public function getDataSet()
 	{
 		return $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/config.xml');

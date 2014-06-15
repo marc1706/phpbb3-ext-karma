@@ -28,8 +28,3 @@ require_once $phpbb_root_path . '../tests/test_framework/phpbb_test_case.' . $ph
 require_once $phpbb_root_path . '../tests/test_framework/phpbb_database_test_case.' . $phpEx;
 require_once $phpbb_root_path . '../tests/test_framework/phpbb_database_test_connection_manager.' . $phpEx;
 require_once $phpbb_root_path . '../tests/test_framework/phpbb_functional_test_case.' . $phpEx;
-require_once 'test_framework/karma_test_case_helpers.' . $phpEx;
-require_once 'test_framework/karma_test_case.' . $phpEx;
-require_once 'test_framework/karma_database_test_case.' . $phpEx;
-require_once 'test_framework/karma_database_test_connection_manager.' . $phpEx;
-require_once 'test_framework/karma_functional_test_case.' . $phpEx;
