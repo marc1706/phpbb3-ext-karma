@@ -46,5 +46,6 @@ $lang = array_merge($lang, array(
 	'MCP_KARMA_REPORT_DETAILS'	=> 'Karma report details',
 	'LOG_KARMA_REPORT_CLOSED'	=> '<strong>Closed karma report</strong><br />» on “%1$s” by %2$s',
 	'LOG_KARMA_REPORT_DELETED'	=> '<strong>Deleted karma report</strong><br />» on “%1$s” by %2$s',
+	'LOG_KARMA_CLEAR'			=> '<strong>Karma History Cleared</strong>',
 
 ));

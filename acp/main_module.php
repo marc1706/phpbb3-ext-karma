@@ -17,12 +17,12 @@ class main_module
 	public $u_action;
 	public $new_config = array();
 	protected $db, $user, $auth, $template;
-	protected $config, $phpbb_root_path, $phpEx, $request, $phpbb_container, $root_path;
+	protected $config, $phpbb_root_path, $phpEx, $phpbb_container, $root_path;
 	public $module_column = array();
 
 	public function __construct()
 	{
-		global $db, $user, $auth, $template, $request, $phpbb_container;
+		global $db, $user, $auth, $template, $phpbb_container;
 		global $config, $phpbb_root_path, $phpEx;
 
 		$user->add_lang_ext('phpbb/karma', 'karma');
@@ -103,8 +103,11 @@ class main_module
 							$where_sql = ' WHERE ' . $this->db->sql_in_set('karma_id', $sql_in);
 							unset($sql_in);
 
-							$sql = 'SELECT * FROM ' . KARMA_TABLE . $where_sql;
+							$sql = 'SELECT *
+								FROM ' . KARMA_TABLE .
+								$where_sql;
 							$result = $this->db->sql_query($sql);
+
 							while ($row = $this->db->sql_fetchrow($result))
 							{
 								$sql = 'UPDATE ' . USERS_TABLE . '
@@ -120,9 +123,13 @@ class main_module
 								SET user_karma_score = 0 ';
 							$this->db->sql_query($sql);
 						}
+
 						$sql = 'DELETE FROM ' . KARMA_TABLE .
-								$where_sql;
+							$where_sql;
 						$this->db->sql_query($sql);
+
+						//Add log to ACP index
+						add_log('admin', 'LOG_KARMA_CLEAR');
 					}
 					else
 					{
@@ -165,7 +172,6 @@ class main_module
 					$this->template->assign_block_vars('history', array(
 						'USERNAME'				=> $row['username_full'],
 						'GIVING_USER_USERNAME'	=> $row['giving_username_full'],
-
 						'IP'					=> $row['ip'],
 						'DATE'					=> $this->user->format_date($row['time']),
 						'ACTION'				=> $row['action'],
