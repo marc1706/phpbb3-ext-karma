@@ -2,7 +2,7 @@
 
 <phpunit backupGlobals="true"
          backupStaticAttributes="true"
-         colors="false"
+         colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -10,24 +10,25 @@
          stopOnFailure="false"
          syntaxCheck="false"
          verbose="true"
-         bootstrap="tests/bootstrap.php">
+         bootstrap="../../../../tests/bootstrap.php"
+>
     <testsuites>
-        <testsuite name="phpBB Karma Extension Test Suite">
-            <directory suffix="_test.php">./tests/</directory>
-            <exclude>./tests/vendor</exclude>
+        <testsuite name="Extension Test Suite">
+            <directory suffix="_test.php">./tests</directory>
         </testsuite>
     </testsuites>
-
-    <groups>
-        <exclude>
-            <group>functional</group>
-            <group>slow</group>
-        </exclude>
-    </groups>
 
     <filter>
         <blacklist>
             <directory>./tests/</directory>
         </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory suffix=".php">./language/</directory>
+                <directory suffix=".php">./migrations/</directory>
+                <directory suffix=".php">./tests/</directory>
+            </exclude>
+        </whitelist>
     </filter>
 </phpunit>
