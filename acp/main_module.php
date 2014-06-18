@@ -187,7 +187,6 @@ class main_module
 
 				$this->template->assign_vars(array(
 					'U_ACTION'			=> $this->u_action,
-					'S_ON_PAGE'			=> $pagination->on_page($this->u_action, $history_count, $this->config['topics_per_page'], $start),
 					'S_LIMIT_DAYS'		=> $s_limit_days,
 					'S_SORT_KEY'		=> $s_sort_key,
 					'S_SORT_DIR'		=> $s_sort_dir,
