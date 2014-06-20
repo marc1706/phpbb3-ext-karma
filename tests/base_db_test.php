@@ -13,6 +13,11 @@ class base_db_test extends \phpbb_database_test_case
 {
 	protected $db;
 
+	static protected function setup_extensions()
+	{
+		return array('phpbb/karma');
+	}
+
 	public function setUp()
 	{
 		parent::setUp();
