@@ -7,8 +7,25 @@
 *
 */
 
-class phpbb_ext_phpbb_karma_tests_base_db_test extends phpbb_ext_phpbb_karma_database_test_case
+namespace phpbb\karma\tests;
+
+class base_db_test extends \phpbb_database_test_case
 {
+	protected $db;
+
+	static protected function setup_extensions()
+	{
+		return array('phpbb/karma');
+	}
+
+	public function setUp()
+	{
+		parent::setUp();
+
+		global $db;
+		$db = $this->db = $this->new_dbal();
+	}
+
 	public function getDataSet()
 	{
 		return $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/config.xml');

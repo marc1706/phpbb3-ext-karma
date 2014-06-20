@@ -173,7 +173,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 		{
 			if (!isset($permission_ids[$auth_option]))
 			{
-				throw new phpbb_db_migration_exception("Failed to get the id of the $auth_option permission!");
+				throw new \phpbb\db\migration\exception("Failed to get the id of the $auth_option permission!");
 			}
 		}
 

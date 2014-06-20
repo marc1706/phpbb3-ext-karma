@@ -271,7 +271,8 @@ class report_model
 	* @param	int	$user_id	The user ID to be validated
 	* @return	bool			true if the user exists, false otherwise
 	*/
-	private function user_id_exists($user_id) {
+	private function user_id_exists($user_id)
+	{
 		// TODO Just copied this from the manager, but there should be some way to make this DRY
 		$sql_array = array(
 			'SELECT'	=> 'count(*) AS num_users',

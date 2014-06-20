@@ -2,14 +2,17 @@
 /**
 *
 * @package phpBB Karma Testing
-* @copyright (c) 2013 phpBB
+* @copyright (c) 2014 phpBB
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
+
+namespace phpbb\karma\tests\mock;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ScopeInterface;
 
-class phpbb_mock_container_builder implements ContainerInterface
+class container_builder implements ContainerInterface
 {
 	protected $services = array();
 	protected $parameters = array();

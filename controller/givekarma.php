@@ -306,7 +306,7 @@ class givekarma
 		{
 			$error[] = 'KARMA_SCORE_INVALID';
 		}
-		
+
 		// Now we may safely cast the karma score to an int and use it as such
 		$karma_score = (int) $karma_score;
 		if ($karma_score !== 0)

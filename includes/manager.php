@@ -236,7 +236,7 @@ class manager
 
 		// Delete the karma from the database
 		$this->delete_karma_by_ids(array($karma_row['karma_id']), $score_change);
-		
+
 		// End the transaction
 		$this->db->sql_transaction('commit');
 	}
@@ -350,7 +350,7 @@ class manager
 			'received_karma'	=> $received_karma,
 		);
 	}
-	
+
 	/**
 	* Gets a specific karma row and returns it in template-ready format
 	* 
@@ -410,7 +410,8 @@ class manager
 	* 		'item_last_edit' => (int) The timestamp of the last time the item the karma was given on was edited
 	* 		'receiving_user_id' => (int) The ID of the user receiving the karma
 	*/
-	public function format_karma_row($karma_row) {
+	public function format_karma_row($karma_row)
+	{
 		$karma_type = $this->get_type_class($karma_row['karma_type_name']);
 
 		return array(
@@ -580,7 +581,8 @@ class manager
 	* @param	int	$user_id	The user ID to be validated
 	* @return	bool			true if the user exists, false otherwise
 	*/
-	private function user_id_exists($user_id) {
+	private function user_id_exists($user_id)
+	{
 		$sql_array = array(
 			'SELECT'	=> 'count(*) AS num_users',
 			'FROM'		=> array(USERS_TABLE => 'u'),

@@ -94,7 +94,7 @@ class reportkarma
 		// Get the necessary instances
 		$karma_manager = $this->container->get('karma.includes.manager');
 		$karma_report_model = $this->container->get('karma.includes.report_model');
-		
+
 		// Retrieve info about the karma being reported, checking if it exists at the same time
 		if (!($karma_data = $karma_manager->get_karma_data($karma_id)))
 		{

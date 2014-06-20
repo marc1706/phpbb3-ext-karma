@@ -2,12 +2,14 @@
 /**
 *
 * @package phpBB Karma Testing
-* @copyright (c) 2013 phpBB
+* @copyright (c) 2014 phpBB
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-class phpbb_mock_karma_auth extends phpbb_auth
+namespace phpbb\karma\tests\mock;
+
+class karma_auth extends \phpbb\auth\auth
 {
 	function acl_get_list($user_id = false, $opts = false, $forum_id = false)
 	{
