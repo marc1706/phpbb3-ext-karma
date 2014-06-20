@@ -29,8 +29,8 @@ matrix:
 env:
   global:
     - EXTNAME="phpbb/karma"
-    - SNIFF="0"
-    - IMAGE_ICC="0"
+    - SNIFF="1"
+    - IMAGE_ICC="1"
     - PHPBB_BRANCH="develop-ascraeus"
 
 branches:
