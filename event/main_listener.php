@@ -186,11 +186,10 @@ class main_listener implements EventSubscriberInterface
 				// Add a description if the user already gave karma on this post
 				if (isset($event['row']['karma_score']) && $event['row']['karma_score'] != 0)
 				{
-					$post_row[
-						($event['row']['karma_score'] > 0)
+					$post_row[($event['row']['karma_score'] > 0)
 						? 'S_GIVEN_KARMA_POSITIVE'
-						: 'S_GIVEN_KARMA_NEGATIVE'
-					] = true;
+						: 'S_GIVEN_KARMA_NEGATIVE'] = true;
+
 					$post_row['GIVEN_KARMA_DESC'] = sprintf(
 						$this->user->lang['GIVEN_KARMA_DESC'],
 						$this->karma_manager->format_karma_score($event['row']['karma_score']),

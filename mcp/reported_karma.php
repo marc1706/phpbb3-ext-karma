@@ -153,15 +153,15 @@ class reported_karma
 						// On the other hand, I could follow the pattern I see most in phpBB and always get the reported karma with the report... Hmmm...
 						$item_data = $karma_manager->get_item_data($karma_row['karma_type_name'], $karma_row['item_id']);
 					}
-					
+
 					$this->template->assign_block_vars('karma_reports', array(
 						// TODO that module name is ridiculously long right now, there probably should be a way to define a shorter one
 						'U_VIEW_DETAILS'				=> append_sid("{$this->phpbb_root_path}mcp.{$this->php_ext}", "i=\phpbb\karma\mcp\\reported_karma&amp;mode=report_details&amp;r={$karma_report['karma_report_id']}"),
 						'REPORTED_KARMA_SUMMARY'		=> ($karma_row !== false)
 							? sprintf($this->user->lang['REPORTED_KARMA_SUMMARY'], $karma_manager->format_karma_score($karma_report['reported_karma_score']), $item_data['title'])
 							: $this->user->lang['KARMA_DELETED'],
- 						'REPORTED_KARMA_GIVER_FULL'		=> get_username_string('full', $karma_row['giving_user_id'], $karma_row['giving_username'], $karma_row['giving_user_colour']),
- 						'REPORTED_KARMA_RECEIVER_FULL'	=> get_username_string('full', $karma_row['receiving_user_id'], $karma_row['receiving_username'], $karma_row['receiving_user_colour']),
+						'REPORTED_KARMA_GIVER_FULL'		=> get_username_string('full', $karma_row['giving_user_id'], $karma_row['giving_username'], $karma_row['giving_user_colour']),
+						'REPORTED_KARMA_RECEIVER_FULL'	=> get_username_string('full', $karma_row['receiving_user_id'], $karma_row['receiving_username'], $karma_row['receiving_user_colour']),
 						'REPORTED_KARMA_TIME'			=> $this->user->format_date($karma_report['reported_karma_time']),
 
 						'REPORTER_FULL'	=> get_username_string('full', $karma_report['user_id'], $karma_report['username'], $karma_report['user_colour']),
@@ -180,7 +180,7 @@ class reported_karma
 				$this->template->assign_vars(array(
 					'L_EXPLAIN'				=> ($mode == 'reports') ? $this->user->lang['MCP_KARMA_REPORTS_OPEN_EXPLAIN'] : $this->user->lang['MCP_KARMA_REPORTS_CLOSED_EXPLAIN'],
 					'L_TITLE'				=> ($mode == 'reports') ? $this->user->lang['MCP_KARMA_REPORTS_OPEN'] : $this->user->lang['MCP_KARMA_REPORTS_CLOSED'],
-					
+
 					'S_MCP_ACTION'			=> $this->u_action,
 					'S_CLOSED'				=> $closed,
 
@@ -256,7 +256,7 @@ class reported_karma
 
 			// Show the succes page
 			$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports';
- 			meta_refresh(3, $redirect);
+			meta_refresh(3, $redirect);
 			trigger_error($this->user->lang['KARMA_REPORT' . ((sizeof($karma_report_id_list) > 1) ? 'S_' : '_') . strtoupper($action) . 'D_SUCCESS'] . '<br /><br />' . sprintf($this->user->lang['RETURN_PAGE'], "<a href=\"$redirect\">", '</a>'));
 		}
 		else

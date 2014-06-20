@@ -97,7 +97,7 @@ class karma_test extends \phpbb_database_test_case
 			'karma_comment'		=> $big_string,
 			'karma_time'		=> pow(2, 31) - 1,
 		);
-		
+
 		// Missing values (should succeed as the missing values are optional)
 		$missing_values_test = array(
 			'item_id'			=> 1,
@@ -170,7 +170,7 @@ class karma_test extends \phpbb_database_test_case
 			$this->assert_user_karma_score_equals($karma['item_id'], $karma['karma_score']);
 		}
 	}
-	
+
 	public function test_update_karma()
 	{
 		$time = time();
@@ -187,7 +187,7 @@ class karma_test extends \phpbb_database_test_case
 		));
 		$this->assert_user_karma_score_equals(1, -1);
 	}
-	
+
 	protected function assert_karma_row_exists($row)
 	{
 		$sql_ary = $row;
@@ -205,7 +205,7 @@ class karma_test extends \phpbb_database_test_case
 		$this->assertEquals(1, $this->db->sql_fetchfield('num_rows'));
 		$this->db->sql_freeresult($result);
 	}
-	
+
 	protected function assert_user_karma_score_equals($post_id, $karma_score)
 	{
 		$result = $this->db->sql_query("
