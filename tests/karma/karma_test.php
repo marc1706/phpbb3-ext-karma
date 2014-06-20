@@ -196,7 +196,7 @@ class karma_test extends \phpbb_database_test_case
 
 		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma WHERE ' . $this->db->sql_build_array('SELECT', $sql_ary);
 		$row['karma_comment'] = $this->db->sql_escape($row['karma_comment']);
-		$sql .= " AND '{$row['karma_comment']}' LIKE " . $this->db->sql_concatenate(karma_comment, '\'%\'');
+		$sql .= " AND '{$row['karma_comment']}' " . $this->db->sql_like_expression($row['karma_comment'] . $this->db->any_char);
 		if (!isset($row['karma_type_id']))
 		{
 			$sql .= ' AND karma_type_id = ' . $this->get_karma_type_id($row['karma_type_name']);
