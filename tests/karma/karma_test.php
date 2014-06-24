@@ -291,8 +291,6 @@ class karma_test extends \phpbb_database_test_case
 
 	protected function assert_karma_row_deleted($row)
 	{
-		$sql_ary = $row;
-
 		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma WHERE item_id = ' . $row['item_id'];
 		$result = $this->db->sql_query($sql);
 		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
