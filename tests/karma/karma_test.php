@@ -229,4 +229,73 @@ class karma_test extends \phpbb_database_test_case
 		$this->db->sql_freeresult($result);
 		return $karma_type_id;
 	}
+
+	public function delete_data()
+	{
+		// Basic test (should succeed)
+		$basic_test = array(
+			'item_id'			=> 1,
+			'karma_type_name'	=> 'post',
+			'giving_user_id'	=> 1,
+		);
+
+		// Big values (should succeed)
+		$big_number = 1000000;
+		$big_values_test = array(
+			'item_id'			=> $big_number,
+			'karma_type_name'	=> 'post',
+			'giving_user_id'	=> $big_number,
+		);
+
+		//Illegal values (expected exceptions)
+		$too_large_int = pow(2, 32);
+		$illegal_values = array(
+			'item_id'			=> array(-1, $too_large_int),
+			'giving_user_id'	=> array(-1, $too_large_int),
+		);
+
+		// Combine the above test values into an array of data
+		$return = array(
+			array($basic_test, ''),
+			array($big_values_test, ''),
+		);
+		foreach ($illegal_values as $field => $values)
+		{
+			$template = $basic_test;
+			foreach ($values as $value)
+			{
+				$template[$field] = $value;
+				$return[] = array($template, '\OutOfBoundsException');
+			}
+		}
+		return $return;
+	}
+
+	/**
+	 * @dataProvider delete_data
+	 */
+	public function test_delete_karma($karma, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->karma_manager->delete_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id']);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_row_deleted($karma);
+		}
+	}
+
+	protected function assert_karma_row_deleted($row)
+	{
+		$sql_ary = $row;
+
+		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma WHERE item_id = ' . $row['item_id'];
+		$result = $this->db->sql_query($sql);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+	}
 }
