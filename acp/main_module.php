@@ -72,8 +72,7 @@ class main_module
 		switch ($mode)
 		{
 			case 'history':
-				include($this->root_path . 'includes/functions_karma.' . $this->phpEx);
-				$karma = new \karmaext();
+				$karma = new karma_helper();
 
 				// Set up general vars
 				$start		= request_var('start', 0);

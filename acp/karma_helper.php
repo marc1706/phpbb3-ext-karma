@@ -7,19 +7,14 @@
 *
 */
 
+namespace phpbb\karma\acp;
+
 // Table name
 global $table_prefix;
 define('KARMA_TABLE', $table_prefix . 'karma');
 
-
-class karmaext
+class karma_helper
 {
-	// Config vars
-	var $version	= '';
-	var $config		= array();
-
-	protected $user, $auth;
-
 	/**
 	* Constructor
 	*/
