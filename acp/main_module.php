@@ -77,8 +77,8 @@ class main_module
 
 				// Set up general vars
 				$start		= request_var('start', 0);
-				$deletemark = ($action == 'del_marked') ? true : false;
-				$deleteall	= ($action == 'del_all') ? true : false;
+				$delete_mark = ($action == 'del_marked') ? true : false;
+				$delete_all	= ($action == 'del_all') ? true : false;
 				$marked		= request_var('mark', array(0));
 
 				// Sort keys
@@ -87,13 +87,13 @@ class main_module
 				$sort_dir	= request_var('sd', 'd');
 
 				// Delete entries if requested and able
-				if (($deletemark || $deleteall) && $this->auth->acl_get('a_clearlogs'))
+				if (($delete_mark || $delete_all) && $this->auth->acl_get('a_clearlogs'))
 				{
 					if (confirm_box(true))
 					{
 						$where_sql = '';
 
-						if ($deletemark && sizeof($marked))
+						if ($delete_mark && sizeof($marked))
 						{
 							$sql_in = array();
 							foreach ($marked as $mark)
@@ -116,8 +116,7 @@ class main_module
 								$this->db->sql_query($sql);
 							}
 						}
-
-						else if ($deleteall)
+						else if ($delete_all)
 						{
 							$sql = 'UPDATE ' . USERS_TABLE . '
 								SET user_karma_score = 0 ';
@@ -135,8 +134,8 @@ class main_module
 					{
 						confirm_box(false, $this->user->lang['CONFIRM_OPERATION'], build_hidden_fields(array(
 							'start'			=> $start,
-							'del_marked'	=> $deletemark,
-							'del_all'		=> $deleteall,
+							'del_marked'	=> $delete_mark,
+							'del_all'		=> $delete_all,
 							'mark'			=> $marked,
 							'st'			=> $sort_days,
 							'sk'			=> $sort_key,
