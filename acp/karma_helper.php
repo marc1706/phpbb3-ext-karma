@@ -16,7 +16,28 @@ define('KARMA_TABLE', $table_prefix . 'karma');
 class karma_helper
 {
 	/**
+	* Config object
+	* @var \phpbb\config\config
+	*/
+	protected $config;
+
+	/**
+	* User object
+	* @var \phpbb\user
+	*/
+	protected $user;
+
+	/**
+	* Auth object
+	* @var \phpbb\auth\auth
+	*/
+	protected $auth;
+
+	/**
 	* Constructor
+	* @param \phpbb\config\config		$config					Config object
+	* @param \phpbb\user				$user					User object
+	* @param \phpbb\auth\auth			$auth					Auth object
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth)
 	{
@@ -26,7 +47,13 @@ class karma_helper
 	}
 
 	/**
-	* View history
+	* Displays history of all karma given
+	* @param	array		$history				Array of history entries
+	* @param	int			$history_count			Total count of history enteries returned
+	* @param	int			$limit					Limit the number of entries that are returned
+	* @param	int			$offset					Offset when fetching the history entries, when pagination
+	* @param	int			$limit_days				Limit the number of days for which entries are returned
+	* @param	strint		$sort_by				Order in which to sort the history entries
 	*/
 	function view_history(&$history, &$history_count, $limit = 0, $offset = 0, $limit_days = 0, $sort_by = 'k.karma_time DESC')
 	{
