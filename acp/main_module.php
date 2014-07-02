@@ -72,7 +72,7 @@ class main_module
 		switch ($mode)
 		{
 			case 'history':
-				$karma = new karma_helper();
+				$karma = new karma_helper($this->config, $this->user, $this->auth);
 
 				// Set up general vars
 				$start		= request_var('start', 0);

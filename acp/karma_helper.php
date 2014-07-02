@@ -18,9 +18,8 @@ class karma_helper
 	/**
 	* Constructor
 	*/
-	public function __construct()
+	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth)
 	{
-		global $config, $user, $auth;
 		$this->config = $config;
 		$this->user = $user;
 		$this->auth = $auth;

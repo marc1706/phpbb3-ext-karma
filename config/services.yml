@@ -21,6 +21,13 @@ services:
         tags:
             - { name: karma.type }
 
+    karma.acp.karma_helper:
+        class: phpbb\karma\acp\karma_helper
+        arguments:
+            - @config
+            - @auth
+            - @user
+
     karma.includes.manager:
         class: phpbb\karma\includes\manager
         arguments:
