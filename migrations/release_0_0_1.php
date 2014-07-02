@@ -34,7 +34,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 			'add_tables'	=> array(
 				$this->table_prefix . 'karma'			=> array(
 					'COLUMNS'		=> array(
-						'karma_id'					=> array('UINT', NULL, 'auto_increment'),
+						'karma_id'					=> array('UINT', null, 'auto_increment'),
 						'karma_type_id'				=> array('UINT', 0),
 						'item_id'					=> array('UINT', 0),
 						'giving_user_id'			=> array('UINT', 0),
@@ -49,7 +49,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 				),
 				$this->table_prefix . 'karma_types'		=> array(
 					'COLUMNS'		=> array(
-						'karma_type_id'				=> array('UINT', NULL, 'auto_increment'),
+						'karma_type_id'				=> array('UINT', null, 'auto_increment'),
 						'karma_type_name'			=> array('VCHAR:255', ''),
 						'karma_type_enabled'		=> array('BOOL', 0),
 					),
@@ -57,7 +57,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 				),
 				$this->table_prefix . 'karma_reports'	=> array(
 					'COLUMNS'		=> array(
-						'karma_report_id'			=> array('UINT', NULL, 'auto_increment'),
+						'karma_report_id'			=> array('UINT', null, 'auto_increment'),
 						'karma_id'					=> array('UINT', 0),
 						'reporter_id'				=> array('UINT', 0),
 						'karma_report_closed'		=> array('BOOL', 0),
