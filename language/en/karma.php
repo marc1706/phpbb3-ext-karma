@@ -115,9 +115,4 @@ $lang = array_merge($lang, array(
 	'KARMA_ALREADY_REPORTED'			=> 'Reported',
 	'NO_REPORT_OTHERS_KARMA'			=> 'You are not allowed to report karma given to others.',
 
-	//ACP variables
-	'ACP_KARMA'							=> 'Karma',
-	'ACP_KARMA_HISTORY'					=> 'Karma History',
-	'ACP_KARMA_HISTORY_EXPLAIN'			=> 'This is a list of all karma changes on this board.',
-
 ));
