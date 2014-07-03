@@ -237,6 +237,7 @@ class karma_test extends \phpbb_database_test_case
 			'item_id'			=> 1,
 			'karma_type_name'	=> 'post',
 			'giving_user_id'	=> 1,
+			'karma_score'		=> 1,
 		);
 
 		// Big values (should succeed)
@@ -245,6 +246,7 @@ class karma_test extends \phpbb_database_test_case
 			'item_id'			=> $big_number,
 			'karma_type_name'	=> 'post',
 			'giving_user_id'	=> $big_number,
+			'karma_score'		=> -128,
 		);
 
 		//Illegal values (expected exceptions)
@@ -252,6 +254,7 @@ class karma_test extends \phpbb_database_test_case
 		$illegal_values = array(
 			'item_id'			=> array(-1, $too_large_int),
 			'giving_user_id'	=> array(-1, $too_large_int),
+			'karma_score'		=> array(-129, 128),
 		);
 
 		// Combine the above test values into an array of data
@@ -281,6 +284,7 @@ class karma_test extends \phpbb_database_test_case
 			$this->setExpectedException($expected_exception);
 		}
 
+		$this->karma_manager->store_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id'], $karma['karma_score']);
 		$this->karma_manager->delete_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id']);
 
 		if (empty($expected_exception))
