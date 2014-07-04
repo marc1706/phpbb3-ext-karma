@@ -285,6 +285,7 @@ class karma_test extends \phpbb_database_test_case
 		}
 
 		$this->karma_manager->store_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id'], $karma['karma_score']);
+		$this->assert_user_karma_score_equals($karma['item_id'], $karma['karma_score']);
 		$this->karma_manager->delete_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id']);
 
 		if (empty($expected_exception))
