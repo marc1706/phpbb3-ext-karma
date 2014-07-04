@@ -297,23 +297,25 @@ class karma_test extends \phpbb_database_test_case
 
 	protected function assert_karma_row_deleted($row)
 	{
-		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma WHERE item_id = ' . $row['item_id'];
-		$sql .= ' AND giving_user_id = ' . $row['giving_user_id'];
-		$result = $this->db->sql_query($sql);
+		$result = $this->db->sql_query("
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma
+			WHERE item_id = " . $row['item_id'] .
+				" AND giving_user_id = " . $row['giving_user_id']
+		);
 		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
 		$this->db->sql_freeresult($result);
 	}
 
 	protected function assert_user_karma_score_updated($row)
 	{
-		$sql = 'SELECT receiving_user_id FROM phpbb_karma WHERE item_id = ' . $row['item_id'];
-		$sql .= ' AND giving_user_id = ' . $row['giving_user_id'];
-		$result = $this->db->sql_query($sql);
-		$receiving_user = $this->db->sql_fetchfield('receiving_user_id');
-		$this->db->sql_freeresult($result);
-
-		$sql = 'SELECT user_karma_score FROM phpbb_users WHERE user_id = ' . (int) $receiving_user;
-		$result = $this->db->sql_query($sql);
+		$result = $this->db->sql_query("
+			SELECT u.user_karma_score
+			FROM phpbb_karma AS k, phpbb_users AS u
+			WHERE k.item_id = " . $row['item_id'] .
+				" AND k.giving_user_id = " . $row['giving_user_id'] .
+				" AND k.receiving_user_id = u.user_id"
+		);
 		$this->assertEquals(0, $this->db->sql_fetchfield('user_karma_score'));
 		$this->db->sql_freeresult($result);
 	}
