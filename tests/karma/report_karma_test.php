@@ -153,10 +153,10 @@ class report_karma_test extends \phpbb_database_test_case
 			$this->setExpectedException($expected_exception);
 		}
 		$this->karma_manager->store_karma($karma_report['karma_type_name'], $karma_report['item_id'], $karma_report['giving_user_id'], $karma_report['karma_score']);
-		$karma_id = $this->get_karma_id($karma_report['item_id']);
+		$karma_id = $this->get_karma_id($karma_report['item_id'], $karma_report['giving_user_id']);
 		if (!isset($karma_report['karma_report_time']))
 		{
-				$this->karma_report_model->report_karma($karma_id, $karma_report['reporter_id'], $karma_report['karma_report_text']);
+			$this->karma_report_model->report_karma($karma_id, $karma_report['reporter_id'], $karma_report['karma_report_text']);
 		}
 		else
 		{
@@ -171,22 +171,23 @@ class report_karma_test extends \phpbb_database_test_case
 
 	protected function assert_karma_report_row_exists($row)
 	{
-		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma_reports WHERE karma_id = ' . $this->get_karma_id($row['item_id']);
+		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma_reports WHERE karma_id = ' . $this->get_karma_id($row['item_id'], $row['giving_user_id']);
 		if ($row['karma_report_time'])
 		{
 			$sql .= ' AND karma_report_time = ' . $row['karma_report_time'];
 		}
 		$result = $this->db->sql_query($sql);
-		$this->assertEquals(true, (bool)$result);
+		$this->assertEquals(true, (bool) $result);
 		$this->db->sql_freeresult($result);
 	}
 
-	protected function get_karma_id($item_id)
+	protected function get_karma_id($item_id, $giving_user_id)
 	{
 		$result = $this->db->sql_query('
 			SELECT karma_id
 			FROM phpbb_karma
-			WHERE item_id = ' . $item_id
+			WHERE item_id = ' . $item_id .
+				' AND giving_user_id = ' . $giving_user_id
 		);
 		$karma_id = $this->db->sql_fetchfield('karma_id');
 		$this->db->sql_freeresult($result);
