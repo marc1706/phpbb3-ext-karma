@@ -152,16 +152,7 @@ class report_karma_test extends \phpbb_database_test_case
 		{
 			$this->setExpectedException($expected_exception);
 		}
-		$this->karma_manager->store_karma($karma_report['karma_type_name'], $karma_report['item_id'], $karma_report['giving_user_id'], $karma_report['karma_score']);
-		$karma_id = $this->get_karma_id($karma_report['item_id'], $karma_report['giving_user_id']);
-		if (!isset($karma_report['karma_report_time']))
-		{
-			$this->karma_report_model->report_karma($karma_id, $karma_report['reporter_id'], $karma_report['karma_report_text']);
-		}
-		else
-		{
-			$this->karma_report_model->report_karma($karma_id, $karma_report['reporter_id'], $karma_report['karma_report_text'], $karma_report['karma_report_time']);
-		}
+		$this->store_and_report_karma($karma_report);
 
 		if (empty($expected_exception))
 		{
@@ -192,5 +183,67 @@ class report_karma_test extends \phpbb_database_test_case
 		$karma_id = $this->db->sql_fetchfield('karma_id');
 		$this->db->sql_freeresult($result);
 		return $karma_id;
+	}
+
+	private function store_and_report_karma($row)
+	{
+		$this->karma_manager->store_karma($row['karma_type_name'], $row['item_id'], $row['giving_user_id'], $row['karma_score']);
+		$karma_id = $this->get_karma_id($row['item_id'], $row['giving_user_id']);
+		if (!isset($row['karma_report_time']))
+		{
+			$this->karma_report_model->report_karma($karma_id, $row['reporter_id'], $row['karma_report_text']);
+		}
+		else
+		{
+			$this->karma_report_model->report_karma($karma_id, $row['reporter_id'], $row['karma_report_text'], $row['karma_report_time']);
+		}
+	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_close_reports($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->store_and_report_karma($karma_report);
+
+		$report_id_list = $this->get_report_id_list();
+		$this->karma_report_model->close_karma_reports($report_id_list);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_report_closed();
+		}
+	}
+
+	protected function get_report_id_list()
+	{
+		$result = $this->db->sql_query('
+			SELECT karma_report_id
+			FROM phpbb_karma_reports'
+		);
+		$report_id_list = array();
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$report_id_list[] = $row['karma_report_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		return $report_id_list;
+	}
+
+	protected function assert_karma_report_closed()
+	{
+		$result = $this->db->sql_query('
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma_reports
+			WHERE karma_report_closed = 0'
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
 	}
 }
