@@ -185,7 +185,7 @@ class report_karma_test extends \phpbb_database_test_case
 		return $karma_id;
 	}
 
-	private function store_and_report_karma($row)
+	protected function store_and_report_karma($row)
 	{
 		$this->karma_manager->store_karma($row['karma_type_name'], $row['item_id'], $row['giving_user_id'], $row['karma_score']);
 		$karma_id = $this->get_karma_id($row['item_id'], $row['giving_user_id']);
@@ -242,6 +242,37 @@ class report_karma_test extends \phpbb_database_test_case
 			SELECT COUNT(*) AS num_rows
 			FROM phpbb_karma_reports
 			WHERE karma_report_closed = 0'
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_delete_reports($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->store_and_report_karma($karma_report);
+
+		$report_id_list = $this->get_report_id_list();
+		$this->karma_report_model->close_karma_reports($report_id_list, true);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_report_deleted();
+		}
+	}
+
+	protected function assert_karma_report_deleted()
+	{
+		$result = $this->db->sql_query('
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma_reports'
 		);
 		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
 		$this->db->sql_freeresult($result);
