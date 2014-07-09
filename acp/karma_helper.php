@@ -34,16 +34,24 @@ class karma_helper
 	protected $auth;
 
 	/**
+	* Karma table
+	* @var string
+	*/
+	protected $karma_table;
+
+	/**
 	* Constructor
 	* @param \phpbb\config\config		$config					Config object
 	* @param \phpbb\user				$user					User object
 	* @param \phpbb\auth\auth			$auth					Auth object
+	* @param string				$karma_table	Karma table
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth)
+	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth, $karma_table)
 	{
 		$this->config = $config;
 		$this->user = $user;
 		$this->auth = $auth;
+		$this->karma_table = $karma_table;
 	}
 
 	/**
@@ -64,7 +72,7 @@ class karma_helper
 		$profile_url = (defined('IN_ADMIN')) ? append_sid("{$phpbb_admin_path}index.$phpEx", 'i=users&amp;mode=overview') : append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile');
 
 		$sql = "SELECT k.*, u.username, u.username_clean, u.user_colour, u.user_ip
-			FROM ". KARMA_TABLE ." k, " . USERS_TABLE . " u
+			FROM ". $this->karma_table ." k, " . USERS_TABLE . " u
 			WHERE u.user_id = k.receiving_user_id
 				" . (($limit_days) ? "AND k.karma_time >= $limit_days" : '') . "
 			ORDER BY $sort_by";
@@ -129,7 +137,7 @@ class karma_helper
 		}
 
 		$sql = 'SELECT COUNT(k.karma_id) AS total_entries
-			FROM ' . KARMA_TABLE . " k
+			FROM ' . $this->karma_table . " k
 			WHERE k.karma_time >= $limit_days";
 		$result = $db->sql_query($sql);
 		$history_count = (int) $db->sql_fetchfield('total_entries');
