@@ -160,6 +160,13 @@ class report_karma_test extends \phpbb_database_test_case
 		}
 	}
 
+	public function test_no_karma_report()
+	{
+		$this->setExpectedException('\OutOfBoundsException', 'NO_KARMA');
+		$this->karma_manager->store_karma('post', 1, 1, 1);
+		$this->karma_report_model->report_karma(-1, 1, 'text');
+	}
+
 	protected function assert_karma_report_row_exists($row)
 	{
 		$sql = 'SELECT COUNT(*) AS num_rows FROM phpbb_karma_reports WHERE karma_id = ' . $this->get_karma_id($row['item_id'], $row['giving_user_id']);
