@@ -283,4 +283,42 @@ class report_karma_test extends \phpbb_database_test_case
 		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
 		$this->db->sql_freeresult($result);
 	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_get_karma_report($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->store_and_report_karma($karma_report);
+		$report_id_list = $this->get_report_id_list();
+
+		$karma_report_fetched = $this->karma_report_model->get_karma_report($report_id_list[0]);
+
+		if(empty($expected_exception))
+		{
+			$this->assert_karma_report_fetched($karma_report_fetched);
+		}
+	}
+
+	public function test_get_no_karma_report()
+	{
+		$this->setExpectedException('\OutOfBoundsException', 'NO_KARMA_REPORT');
+		$this->karma_report_model->get_karma_report(0);
+	}
+
+	protected function assert_karma_report_fetched($karma_report_fetched)
+	{
+		$result = $this->db->sql_query('
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma_reports
+			WHERE karma_report_id = ' . $karma_report_fetched['karma_report_id']
+		);
+		$this->assertEquals(1, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+	}
 }
