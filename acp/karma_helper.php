@@ -30,23 +30,55 @@ class karma_helper
 	protected $auth;
 
 	/**
+	* Database object
+	* @var \phpbb\db\driver\driver_interface
+	*/
+	protected $db;
+
+	/**
 	* Karma table
 	* @var string
 	*/
 	protected $karma_table;
 
 	/**
-	* Constructor
-	* @param \phpbb\config\config		$config					Config object
-	* @param \phpbb\user				$user					User object
-	* @param \phpbb\auth\auth			$auth					Auth object
-	* @param string				$karma_table	Karma table
+	* phpBB root path
+	* @var string
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth, $karma_table)
+	protected $phpbb_root_path;
+
+	/**
+	* phpBB admin path
+	* @var string
+	*/
+	protected $phpbb_admin_path;
+
+	/**
+	* php file extension
+	* @var string
+	*/
+	protected $phpEx;
+
+	/**
+	* Constructor
+	* @param \phpbb\config\config				$config					Config object
+	* @param \phpbb\user						$user					User object
+	* @param \phpbb\auth\auth					$auth					Auth object
+	* @param \phpbb\db\driver\driver_interface	$db						Database object
+	* @param string								$karma_table			Karma table
+	* @param string								$phpbb_root_path		phpBB root path
+	* @param string								$relative_admin_path	Relative admin root path
+	* @param string								$phpEx					php file extension
+	*/
+	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, $karma_table, $phpbb_root_path, $relative_admin_path, $phpEx)
 	{
 		$this->config = $config;
 		$this->user = $user;
 		$this->auth = $auth;
+		$this->db = $db;
+		$this->phpbb_root_path = $phpbb_root_path;
+		$this->phpbb_admin_path = $phpbb_root_path . $relative_admin_path;
+		$this->phpEx = $phpEx;
 		$this->karma_table = $karma_table;
 	}
 
@@ -61,22 +93,20 @@ class karma_helper
 	*/
 	function view_history(&$history, &$history_count, $limit = 0, $offset = 0, $limit_days = 0, $sort_by = 'k.karma_time DESC')
 	{
-		global $config, $db, $user, $auth, $phpEx, $phpbb_root_path, $phpbb_admin_path;
-
 		$giving_user_id_list = $is_auth = $is_mod = array();
 
-		$profile_url = (defined('IN_ADMIN')) ? append_sid("{$phpbb_admin_path}index.$phpEx", 'i=users&amp;mode=overview') : append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile');
+		$profile_url = (defined('IN_ADMIN')) ? append_sid("{$this->phpbb_admin_path}index.$this->phpEx", 'i=users&amp;mode=overview') : append_sid("{$this->phpbb_root_path}memberlist.$this->phpEx", 'mode=viewprofile');
 
 		$sql = "SELECT k.*, u.username, u.username_clean, u.user_colour, u.user_ip
 			FROM ". $this->karma_table ." k, " . USERS_TABLE . " u
 			WHERE u.user_id = k.receiving_user_id
 				" . (($limit_days) ? "AND k.karma_time >= $limit_days" : '') . "
 			ORDER BY $sort_by";
-		$result = $db->sql_query_limit($sql, $limit, $offset);
+		$result = $this->db->sql_query_limit($sql, $limit, $offset);
 
 		$i = 0;
 		$history = array();
-		while ($row = $db->sql_fetchrow($result))
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			if ($row['giving_user_id'])
 			{
@@ -102,7 +132,7 @@ class karma_helper
 			$i++;
 		}
 
-		$db->sql_freeresult($result);
+		$this->db->sql_freeresult($result);
 
 		if (sizeof($giving_user_id_list))
 		{
@@ -111,14 +141,14 @@ class karma_helper
 
 			$sql = 'SELECT user_id, username, user_colour
 				FROM ' . USERS_TABLE . '
-				WHERE ' . $db->sql_in_set('user_id', $giving_user_id_list);
-			$result = $db->sql_query($sql);
+				WHERE ' . $this->db->sql_in_set('user_id', $giving_user_id_list);
+			$result = $this->db->sql_query($sql);
 
-			while ($row = $db->sql_fetchrow($result))
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$giving_user_names_list[$row['user_id']] = $row;
 			}
-			$db->sql_freeresult($result);
+			$this->db->sql_freeresult($result);
 
 			foreach ($history as $key => $row)
 			{
@@ -135,9 +165,9 @@ class karma_helper
 		$sql = 'SELECT COUNT(k.karma_id) AS total_entries
 			FROM ' . $this->karma_table . " k
 			WHERE k.karma_time >= $limit_days";
-		$result = $db->sql_query($sql);
-		$history_count = (int) $db->sql_fetchfield('total_entries');
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$history_count = (int) $this->db->sql_fetchfield('total_entries');
+		$this->db->sql_freeresult($result);
 
 		return;
 	}

@@ -17,7 +17,7 @@ class main_module
 	public $u_action;
 	public $new_config = array();
 	protected $db, $user, $auth, $template;
-	protected $config, $phpbb_root_path, $phpEx, $phpbb_container, $root_path;
+	protected $config, $phpbb_root_path, $phpEx, $phpbb_container, $root_path, $relative_admin_path;
 	public $module_column = array();
 
 	public function __construct()
@@ -28,6 +28,7 @@ class main_module
 		$user->add_lang_ext('phpbb/karma', 'karma');
 
 		$this->root_path = $phpbb_root_path . 'ext/phpbb/karma/';
+		$this->relative_admin_path = 'adm/';
 		$this->db = $db;
 		$this->user = $user;
 		$this->template = $template;
@@ -72,7 +73,7 @@ class main_module
 		switch ($mode)
 		{
 			case 'history':
-				$karma = new karma_helper($this->config, $this->user, $this->auth, $this->phpbb_container->getParameter('tables.karma.karma'));
+				$karma = new karma_helper($this->config, $this->user, $this->auth, $this->db, $this->phpbb_container->getParameter('tables.karma.karma'), $this->phpbb_root_path, $this->relative_admin_path, $this->phpEx);
 
 				// Set up general vars
 				$start		= request_var('start', 0);

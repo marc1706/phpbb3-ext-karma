@@ -25,8 +25,13 @@ services:
         class: phpbb\karma\acp\karma_helper
         arguments:
             - @config
-            - @auth
             - @user
+            - @auth
+            - @dbal.conn
+            - %tables.karma.karma%
+            - %core.root_path%
+            - %core.adm_relative_path%
+            - %core.php_ext%
 
     karma.includes.manager:
         class: phpbb\karma\includes\manager
