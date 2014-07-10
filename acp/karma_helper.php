@@ -9,10 +9,6 @@
 
 namespace phpbb\karma\acp;
 
-// Table name
-global $table_prefix;
-define('KARMA_TABLE', $table_prefix . 'karma');
-
 class karma_helper
 {
 	/**
