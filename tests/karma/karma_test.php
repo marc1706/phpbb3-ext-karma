@@ -295,6 +295,12 @@ class karma_test extends \phpbb_database_test_case
 		}
 	}
 
+	public function test_delete_karma_no_user()
+	{
+		$this->setExpectedException('\OutOfBoundsException', 'NO_USER');
+		$this->karma_manager->delete_karma('post', 1, pow(2, 32));
+	}
+
 	protected function assert_karma_row_deleted($row)
 	{
 		$result = $this->db->sql_query("
