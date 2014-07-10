@@ -19,7 +19,7 @@ class base
 
 	/**
 	* Database object
-	* @var \phpbb\db\driver
+	* @var \phpbb\db\driver\driver_interface
 	*/
 	protected $db;
 
@@ -52,14 +52,14 @@ class base
 	* NOTE: The parameters of this method must match in order and type with
 	* the dependencies defined in the services.yml file for this service.
 	* 
-	* @param phpbb_auth			$auth				Authentication object
-	* @param phpbb_db_driver	$db					Database object
-	* @param phpbb_user			$user				User object
-	* @param string				$phpbb_root_path	phpBB root path
-	* @param string				$php_ext			php file extension
-	* @param string				$table_name			Name of the karma database table
+	* @param \phpbb\auth\auth					$auth				Authentication object
+	* @param \phpbb\db\driver\driver_interface	$db					Database object
+	* @param \phpbb\user						$user				User object
+	* @param string								$phpbb_root_path	phpBB root path
+	* @param string								$php_ext			php file extension
+	* @param string								$table_name			Name of the karma database table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver $db, \phpbb\user $user, $phpbb_root_path, $php_ext, $table_name)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, $phpbb_root_path, $php_ext, $table_name)
 	{
 		$this->auth = $auth;
 		$this->db = $db;
