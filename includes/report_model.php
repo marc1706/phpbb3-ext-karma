@@ -13,7 +13,7 @@ class report_model
 {
 	/**
 	* Database object
-	* @var \phpbb\db\driver\factory
+	* @var \phpbb\db\driver\driver_interface
 	*/
 	protected $db;
 
@@ -40,11 +40,11 @@ class report_model
 	* NOTE: The parameters of this method must match in order and type with
 	* the dependencies defined in the services.yml file for this service.
 	* 
-	* @param \phpbb\db\driver\factory	$db						Database Object
+	* @param \phpbb\db\driver\driver_interface	$db						Database Object
 	* @param phpbb_user			$user					User object
 	* @param string				$karma_reports_table	Name of the karma_reports database table
 	*/
-	public function __construct(\phpbb\db\driver\factory $db, \phpbb\user $user, \phpbb\karma\includes\manager $karma_manager, $karma_reports_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\karma\includes\manager $karma_manager, $karma_reports_table)
 	{
 		$this->db = $db;
 		$this->user = $user;
