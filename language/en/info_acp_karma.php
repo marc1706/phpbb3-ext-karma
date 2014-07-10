@@ -2,7 +2,7 @@
 /**
 *
 * @package phpBB Karma
-* @copyright (c) 2013 phpBB
+* @copyright (c) 2014 phpBB
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -31,21 +31,9 @@ if (empty($lang) || !is_array($lang))
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
-//
-// Some characters you may want to copy&paste:
-// ’ » “ ” …
-//
 
-// These translations need to be available globally
 $lang = array_merge($lang, array(
-	'UCP_KARMA'					=> 'Karma',
-	'UCP_RECEIVED_KARMA'		=> 'Received karma',
-	'MCP_KARMA'					=> 'Reported karma',
-	'MCP_KARMA_REPORTS_OPEN'	=> 'Open karma reports',
-	'MCP_KARMA_REPORTS_CLOSED'	=> 'Closed karma reports',
-	'MCP_KARMA_REPORT_DETAILS'	=> 'Karma report details',
-	'LOG_KARMA_REPORT_CLOSED'	=> '<strong>Closed karma report</strong><br />» on “%1$s” by %2$s',
-	'LOG_KARMA_REPORT_DELETED'	=> '<strong>Deleted karma report</strong><br />» on “%1$s” by %2$s',
-	'LOG_KARMA_CLEAR'			=> '<strong>Karma History Cleared</strong>',
-
+	'ACP_KARMA'							=> 'Karma',
+	'ACP_KARMA_HISTORY'					=> 'Karma History',
+	'ACP_KARMA_HISTORY_EXPLAIN'			=> 'This is a list of all karma changes on this board.',
 ));

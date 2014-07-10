@@ -32,7 +32,7 @@ class manager
 
 	/**
 	* Database object
-	* @var \phpbb\db\driver
+	* @var \phpbb\db\driver\driver_interface
 	*/
 	private $db;
 
@@ -86,7 +86,7 @@ class manager
 	* @param array						$karma_types		Available karma type names
 	* @param phpbb_cache_service		$cache				Cache object
 	* @param ContainerBuilder			$container			Container object (no type verification to allow testing with a mock container)
-	* @param phpbb_db_driver			$db					Database Object
+	* @param \phpbb\db\driver\driver_interface		$db					Database Object
 	* @param phpbb_event_dispatcher			$dispatcher			Dispatcher object
 	* @param phpbb_controller_helper	$helper				Controller helper object
 	* @param phpbb_user					$user				User object
@@ -95,7 +95,7 @@ class manager
 	* @param string						$karma_table		Name of the karma database table
 	* @param string						$karma_types_table	Name of the karma_types database table
 	*/
-	public function __construct($karma_types, \phpbb\cache\service $cache, $container, \phpbb\db\driver\driver $db, \phpbb\event\dispatcher $dispatcher, \phpbb\controller\helper $helper, \phpbb\user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
+	public function __construct($karma_types, \phpbb\cache\service $cache, $container, \phpbb\db\driver\driver_interface $db, \phpbb\event\dispatcher $dispatcher, \phpbb\controller\helper $helper, \phpbb\user $user, $phpbb_root_path, $php_ext, $karma_table, $karma_types_table)
 	{
 		$this->karma_types = $karma_types;
 		$this->cache = $cache;

@@ -1,0 +1,84 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_TITLE_EXPLAIN}</p>
+
+<form id="acp_karma" method="post" action="{U_ACTION}">
+
+<!-- IF S_KARMA_HISTORY -->
+
+	<div class="rightside pagination">
+			<!-- IF .pagination -->
+				<!-- INCLUDE pagination.html -->
+			<!-- ELSE -->
+				{PAGE_NUMBER}
+			<!-- ENDIF -->
+	</div>
+
+	<!-- IF .history -->
+		<table cellspacing="1">
+		<thead>
+		<tr>
+			<th>{L_USERNAME}</th>
+			<th style="text-align: center;">{L_IP}</th>
+			<th style="text-align: center;">{L_TIME}</th>
+			<th>{L_ACTION}</th>
+			<th>{L_MESSAGE}</th>
+			<th style="text-align: center;">{L_MARK}</th>
+		</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN history -->
+			<!-- IF history.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+				<td>{history.GIVING_USER_USERNAME} &raquo; {history.USERNAME}</td>
+				<td style="text-align: center;">{history.IP}</td>
+				<td style="text-align: center;">{history.DATE}</td>
+				<td>{history.ACTION}</td>
+				<td><span>{history.COMMENT}</span></td>
+				<td style="text-align: center;"><input type="checkbox" class="radio" name="mark[]" value="{history.ID}" /></td>
+			</tr>
+		<!-- END history -->
+		</tbody>
+		</table>
+	<!-- ELSE -->
+		<div class="errorbox">
+			<p>{L_NO_ENTRIES}</p>
+		</div>
+	<!-- ENDIF -->
+
+	<fieldset class="display-options">
+		{L_DISPLAY_LOG}: &nbsp;{S_LIMIT_DAYS}&nbsp;{L_SORT_BY}: {S_SORT_KEY} {S_SORT_DIR}
+		<input class="button2" type="submit" value="{L_GO}" name="sort" />
+		{S_FORM_TOKEN}
+	</fieldset>
+	<hr />
+
+	<div class="rightside pagination">
+			<!-- IF .pagination -->
+				<!-- INCLUDE pagination.html -->
+			<!-- ELSE -->
+				{PAGE_NUMBER}
+			<!-- ENDIF -->
+	</div>
+	<!-- IF S_SHOW_FORUMS -->
+		<fieldset class="quick">
+			{L_SELECT_FORUM}: <select name="f" onchange="if(this.options[this.selectedIndex].value != -1){ this.form.submit(); }">{S_FORUM_BOX}</select>
+			<input class="button2" type="submit" value="{L_GO}" />
+		</fieldset>
+	<!-- ENDIF -->
+	<!-- IF S_CLEARHISTORY -->
+		<fieldset class="quick">
+			<input class="button2" type="submit" name="action[del_all]" value="{L_DELETE_ALL}" />&nbsp;
+			<input class="button2" type="submit" name="action[del_marked]" value="{L_DELETE_MARKED}" /><br />
+			<p class="small"><a href="#" onclick="marklist('acp_karma', 'mark', true); return false;">{L_MARK_ALL}</a> :: <a href="#" onclick="marklist('acp_karma', 'mark', false); return false;">{L_UNMARK_ALL}</a></p>
+		</fieldset>
+	<!-- ENDIF -->
+
+<!-- ENDIF -->
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->
