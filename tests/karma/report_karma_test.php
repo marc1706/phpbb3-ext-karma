@@ -377,4 +377,60 @@ class report_karma_test extends \phpbb_database_test_case
 		sort($report_id_list);
 		$this->assertEquals($result, $report_id_list);
 	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_delete_karma_reports_by_karma_ids($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->store_and_report_karma($karma_report);
+
+		$karma_id_list = $this->get_karma_id_list();
+		$this->karma_report_model->delete_karma_reports_by_karma_ids($karma_id_list);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_report_deleted_by_id($karma_id_list);
+		}
+	}
+
+	protected function get_karma_id_list()
+	{
+		$result = $this->db->sql_query('
+			SELECT DISTINCT karma_id
+			FROM phpbb_karma_reports'
+		);
+		$karma_id_list = array();
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$karma_id_list[] = $row['karma_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		return $karma_id_list;
+	}
+
+	protected function assert_karma_report_deleted_by_id($karma_id_list)
+	{
+		$result = $this->db->sql_query('
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma_reports'
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+
+		$result = $this->db->sql_query('
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma
+			WHERE ' . $this->db->sql_in_set('karma_id', $karma_id_list) .
+				' AND karma_reported = 1'
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+	}
 }
