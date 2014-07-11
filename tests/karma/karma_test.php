@@ -229,4 +229,100 @@ class karma_test extends \phpbb_database_test_case
 		$this->db->sql_freeresult($result);
 		return $karma_type_id;
 	}
+
+	public function delete_data()
+	{
+		// Basic test (should succeed)
+		$basic_test = array(
+			'item_id'			=> 1,
+			'karma_type_name'	=> 'post',
+			'giving_user_id'	=> 1,
+			'karma_score'		=> 1,
+		);
+
+		// Big values (should succeed)
+		$big_number = 1000000;
+		$big_values_test = array(
+			'item_id'			=> $big_number,
+			'karma_type_name'	=> 'post',
+			'giving_user_id'	=> $big_number,
+			'karma_score'		=> -128,
+		);
+
+		//Illegal values (expected exceptions)
+		$too_large_int = pow(2, 32);
+		$illegal_values = array(
+			'item_id'			=> array(-1, $too_large_int),
+			'giving_user_id'	=> array(-1, $too_large_int),
+			'karma_score'		=> array(-129, 128),
+		);
+
+		// Combine the above test values into an array of data
+		$return = array(
+			array($basic_test, ''),
+			array($big_values_test, ''),
+		);
+		foreach ($illegal_values as $field => $values)
+		{
+			$template = $basic_test;
+			foreach ($values as $value)
+			{
+				$template[$field] = $value;
+				$return[] = array($template, '\OutOfBoundsException');
+			}
+		}
+		return $return;
+	}
+
+	/**
+	 * @dataProvider delete_data
+	 */
+	public function test_delete_karma($karma, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+
+		$this->karma_manager->store_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id'], $karma['karma_score']);
+		$this->assert_user_karma_score_equals($karma['item_id'], $karma['karma_score']);
+		$this->karma_manager->delete_karma($karma['karma_type_name'], $karma['item_id'], $karma['giving_user_id']);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_row_deleted($karma);
+			$this->assert_user_karma_score_updated($karma);
+		}
+	}
+
+	public function test_delete_karma_no_user()
+	{
+		$this->setExpectedException('\OutOfBoundsException', 'NO_USER');
+		$this->karma_manager->delete_karma('post', 1, pow(2, 32));
+	}
+
+	protected function assert_karma_row_deleted($row)
+	{
+		$result = $this->db->sql_query("
+			SELECT COUNT(*) AS num_rows
+			FROM phpbb_karma
+			WHERE item_id = " . $row['item_id'] .
+				" AND giving_user_id = " . $row['giving_user_id']
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('num_rows'));
+		$this->db->sql_freeresult($result);
+	}
+
+	protected function assert_user_karma_score_updated($row)
+	{
+		$result = $this->db->sql_query("
+			SELECT u.user_karma_score
+			FROM phpbb_karma AS k, phpbb_users AS u
+			WHERE k.item_id = " . $row['item_id'] .
+				" AND k.giving_user_id = " . $row['giving_user_id'] .
+				" AND k.receiving_user_id = u.user_id"
+		);
+		$this->assertEquals(0, $this->db->sql_fetchfield('user_karma_score'));
+		$this->db->sql_freeresult($result);
+	}
 }
