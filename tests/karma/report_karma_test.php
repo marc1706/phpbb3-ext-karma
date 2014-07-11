@@ -321,4 +321,60 @@ class report_karma_test extends \phpbb_database_test_case
 		$this->assertEquals(1, $this->db->sql_fetchfield('num_rows'));
 		$this->db->sql_freeresult($result);
 	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_list_karma_reports_open($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+		$this->store_and_report_karma($karma_report);
+
+		$report_id_list = $this->get_report_id_list();
+		$report_list = array();
+		$report_list = $this->karma_report_model->list_karma_reports(false, sizeof($report_id_list), 0);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_report_listed($report_list, $report_id_list);
+		}
+	}
+
+	/**
+	 * @dataProvider report_data
+	 */
+	public function test_list_karma_reports_closed($karma_report, $expected_exception)
+	{
+		if (!empty($expected_exception))
+		{
+			$this->setExpectedException($expected_exception);
+		}
+		$this->store_and_report_karma($karma_report);
+
+		$report_id_list = $this->get_report_id_list();
+		$this->karma_report_model->close_karma_reports($report_id_list);
+
+		$report_list = array();
+		$report_list = $this->karma_report_model->list_karma_reports(true, sizeof($report_id_list), 0);
+
+		if (empty($expected_exception))
+		{
+			$this->assert_karma_report_listed($report_list, $report_id_list);
+		}
+	}
+
+	protected function assert_karma_report_listed($report_list, $report_id_list)
+	{
+		$result = array();
+		for($i = 0; $i < sizeof($report_id_list); $i++)
+		{
+			$result[] = $report_list['karma_reports'][$i]['karma_report_id'];
+		}
+		sort($result);
+		sort($report_id_list);
+		$this->assertEquals($result, $report_id_list);
+	}
 }
