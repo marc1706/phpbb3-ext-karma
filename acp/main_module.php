@@ -104,7 +104,7 @@ class main_module
 							unset($sql_in);
 
 							$sql = 'SELECT *
-								FROM ' . KARMA_TABLE .
+								FROM ' . $this->phpbb_container->getParameter('tables.karma.karma') .
 								$where_sql;
 							$result = $this->db->sql_query($sql);
 
@@ -123,7 +123,7 @@ class main_module
 							$this->db->sql_query($sql);
 						}
 
-						$sql = 'DELETE FROM ' . KARMA_TABLE .
+						$sql = 'DELETE FROM ' . $this->phpbb_container->getParameter('tables.karma.karma') .
 							$where_sql;
 						$this->db->sql_query($sql);
 
