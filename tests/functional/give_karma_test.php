@@ -47,7 +47,11 @@ class karma_test extends \phpbb_functional_test_case
 		$this->logout();
 		$this->login();
 		$this->admin_login();
-		$crawler = self::request('GET', "app.php/givekarma/post/2?score=positive&sid={$this->sid}");
+
+		$this->add_lang_ext('phpbb/karma', 'karma');
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('GIVEKARMA_POSITIVE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'app.php/')) ."&sid={$this->sid}");
 		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 
 		$form = $crawler->selectButton('submit')->form();
@@ -64,7 +68,10 @@ class karma_test extends \phpbb_functional_test_case
 
 	public function test_givekarma_undo()
 	{
-		$crawler = self::request('GET', "app.php/givekarma/post/2?sid={$this->sid}");
+		$this->add_lang_ext('phpbb/karma', 'karma');
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('GIVEKARMA_POSITIVE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'app.php/')) ."&sid={$this->sid}");
 		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 
 		$form = $crawler->selectButton('submit')->form();
@@ -80,7 +87,10 @@ class karma_test extends \phpbb_functional_test_case
 
 	public function test_givekarma_negative()
 	{
-		$crawler = self::request('GET', "app.php/givekarma/post/2?score=negative&sid={$this->sid}");
+		$this->add_lang_ext('phpbb/karma', 'karma');
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('GIVEKARMA_NEGATIVE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'app.php/')) ."&sid={$this->sid}");
 		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 
 		$form = $crawler->selectButton('submit')->form();
