@@ -29,7 +29,7 @@ class karma_test extends \phpbb_functional_test_case
 		$this->add_lang_ext('phpbb/karma', 'karma');
 	}
 
-	public function karma_create_post()
+	protected function karma_create_post()
 	{
 		$this->logout();
 		$uid = $this->create_user('karma_user');
@@ -99,12 +99,14 @@ class karma_test extends \phpbb_functional_test_case
 		$crawler = self::request('GET', substr($link, strpos($link, 'viewtopic.')));
 		$this->assertContains('Karma: -1', $crawler->filter('html')->text());
 
-		$this->delete_post();
+		$this->delete_karma_post();
 	}
 
-	public function delete_post()
+	protected function delete_karma_post()
 	{
-		$crawler = self::request('GET', "posting.php?mode=delete&f=2&p=2&sid={$this->sid}");
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('DELETE_POST', '', ''))->eq(1)->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'posting.php?mode=delete')) ."&sid={$this->sid}");
 		$form = $crawler->selectButton('Yes')->form();
 		$form['delete_permanent']->tick();
 		$crawler = self::submit($form);
