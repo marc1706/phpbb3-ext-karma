@@ -25,36 +25,61 @@ class karma_acp_test extends \phpbb_functional_test_case
 
 		$this->login();
 		$this->admin_login();
+		$this->add_lang_ext('phpbb/karma', 'info_acp_karma');
+		$this->add_lang_ext('phpbb/karma', 'karma');
 	}
 
 	public function test_karma_history()
 	{
-		$this->create_and_karma_post();
 		$crawler = $this->request('GET', 'adm/index.php?i=\phpbb\karma\acp\main_module&mode=history&sid=' . $this->sid);
-
-		$this->add_lang_ext('phpbb/karma', 'info_acp_karma');
 		$this->assertContainsLang('ACP_KARMA_HISTORY', $crawler->text());
 	}
 
-	protected function create_and_karma_post()
+	public function test_delete_all_karma()
+	{
+		$this->create_and_karma_post('test_user1');
+		$crawler = $this->request('GET', 'adm/index.php?i=\phpbb\karma\acp\main_module&mode=history&sid=' . $this->sid);
+		$this->assertContains('test_user1', $crawler->filter('html')->text());
+		$form = $crawler->selectButton('action[del_all]')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('CONFIRM_OPERATION', $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('NO_ENTRIES', $crawler->text());
+		$this->delete_karma_post();
+	}
+
+	public function test_delete_marked_karma()
+	{
+		$this->create_and_karma_post('test_user2');
+		$crawler = $this->request('GET', 'adm/index.php?i=\phpbb\karma\acp\main_module&mode=history&sid=' . $this->sid);
+		$this->assertContains('test_user2', $crawler->filter('html')->text());
+		$form = $crawler->selectButton('action[del_marked]')->form();
+		$form['mark[0]']->tick();
+		$crawler = self::submit($form);
+		$this->assertContains($this->lang('CONFIRM_OPERATION'), $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('NO_ENTRIES', $crawler->text());
+		$this->delete_karma_post();
+	}
+
+	protected function create_and_karma_post($user_name)
 	{
 		$this->logout();
-		$uid = $this->create_user('test_user');
+		$uid = $this->create_user($user_name);
 		if (!$uid)
 		{
 			$this->markTestIncomplete('Unable to create test_user');
 		}
-		$this->login('test_user');
+		$this->login($user_name);
 
 		$post = $this->create_post(2, 1, 'Testing Subject', 'This is a test post by test_user.', array());
-		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
-		$this->assertContains('This is a test post by test_user.', $crawler->filter('html')->text());
 
 		$this->logout();
 		$this->login();
 		$this->admin_login();
 
-		$this->add_lang_ext('phpbb/karma', 'karma');
 		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
 		$link = $crawler->selectLink($this->lang('GIVEKARMA_POSITIVE', '', ''))->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'app.php/')) ."&sid={$this->sid}");
@@ -64,8 +89,15 @@ class karma_acp_test extends \phpbb_functional_test_case
 		$form['karma_score']->select('1');
 		$form['karma_comment'] = 'Positive Karma Comment';
 		$crawler = self::submit($form);
-		$link = $crawler->filter('a:contains("karma")')->attr('href');
-		$crawler = self::request('GET', substr($link, strpos($link, 'viewtopic.')));
-		$this->assertContains('Karma: +1', $crawler->filter('html')->text());
+	}
+
+	protected function delete_karma_post()
+	{
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('DELETE_POST', '', ''))->eq(1)->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'posting.php?mode=delete')) ."&sid={$this->sid}");
+		$form = $crawler->selectButton('Yes')->form();
+		$form['delete_permanent']->tick();
+		$crawler = self::submit($form);
 	}
 }
