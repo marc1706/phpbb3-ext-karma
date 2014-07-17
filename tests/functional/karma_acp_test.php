@@ -46,7 +46,7 @@ class karma_acp_test extends \phpbb_functional_test_case
 		$form = $crawler->selectButton('confirm')->form();
 		$crawler = self::submit($form);
 		$this->assertContainsLang('NO_ENTRIES', $crawler->text());
-		$this->delete_karma_post();
+		$this->delete_test_user_post('test_user1');
 	}
 
 	public function test_delete_marked_karma()
@@ -61,7 +61,7 @@ class karma_acp_test extends \phpbb_functional_test_case
 		$form = $crawler->selectButton('confirm')->form();
 		$crawler = self::submit($form);
 		$this->assertContainsLang('NO_ENTRIES', $crawler->text());
-		$this->delete_karma_post();
+		$this->delete_test_user_post('test_user2');
 	}
 
 	protected function create_and_karma_post($user_name)
@@ -91,13 +91,21 @@ class karma_acp_test extends \phpbb_functional_test_case
 		$crawler = self::submit($form);
 	}
 
-	protected function delete_karma_post()
+	protected function delete_test_user_post($test_user)
 	{
+		$crawler = self::request('GET', "memberlist.php");
+		$profile_link = $crawler->selectLink($test_user)->link()->getUri();
+		$crawler = self::request('GET', substr($profile_link, strpos($profile_link, 'memberlist.php?mode=viewprofile')));
+		$this->assertContains('Karma: 0', $crawler->filter('html')->text());
+
 		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
 		$link = $crawler->selectLink($this->lang('DELETE_POST', '', ''))->eq(1)->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'posting.php?mode=delete')) ."&sid={$this->sid}");
 		$form = $crawler->selectButton('Yes')->form();
 		$form['delete_permanent']->tick();
 		$crawler = self::submit($form);
+
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$this->assertNotContains('Testing Subject', $crawler->filter('html')->text());
 	}
 }
