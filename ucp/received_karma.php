@@ -60,7 +60,7 @@ class received_karma
 			'L_TITLE'			=> $this->user->lang['UCP_RECEIVED_KARMA'],
 			'S_REPORT_KARMA'	=> true, // TODO make this depend on permissions and perhaps a setting
 
-			'PAGE_NUMBER'			=> $pagination->on_page($base_url, $total, $this->config['topics_per_page'], $start),
+			'PAGE_NUMBER'			=> $pagination->on_page($total, $this->config['topics_per_page'], $start),
 			'TOTAL'					=> $total,
 			'TOTAL_RECEIVED_KARMA'	=> $this->user->lang('LIST_RECEIVED_KARMA', (int) $total),
 		));

@@ -184,7 +184,7 @@ class reported_karma
 					'S_MCP_ACTION'			=> $this->u_action,
 					'S_CLOSED'				=> $closed,
 
-					'PAGE_NUMBER'			=> $pagination->on_page($base_url, $total, $this->config['topics_per_page'], $start),
+					'PAGE_NUMBER'			=> $pagination->on_page($total, $this->config['topics_per_page'], $start),
 					'TOTAL'					=> $total,
 					'TOTAL_KARMA_REPORTS'	=> $this->user->lang('LIST_KARMA_REPORTS', (int) $total),
 					)
