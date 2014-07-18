@@ -25,6 +25,7 @@ class report_karma_test extends \phpbb_functional_test_case
 
 		$this->add_lang_ext('phpbb/karma', 'karma');
 		$this->add_lang_ext('phpbb/karma', 'karma_global');
+		$this->add_lang('mcp');
 	}
 
 	protected function create_and_karma_post($user_name)
@@ -52,7 +53,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$crawler = self::submit($form);
 	}
 
-	public function test_received_karma()
+	public function test_report_karma()
 	{
 		$this->create_and_karma_post('test_report_user');
 		$this->logout();
@@ -72,5 +73,47 @@ class report_karma_test extends \phpbb_functional_test_case
 		$form['karma_report_text'] = 'This is a report_karma_test';
 		$crawler = self::submit($form);
 		$this->assertContainsLang('KARMA_SUCCESSFULLY_REPORTED', $crawler->text());
+		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'ucp.php')));
+		$this->assertContainsLang('KARMA_ALREADY_REPORTED', $crawler->text());
+	}
+
+	public function test_close_karma_report()
+	{
+		$this->logout();
+		$this->login();
+		$this->admin_login();
+		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
+		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
+		$form = $crawler->selectButton('action[close]')->form();
+		$form['karma_report_id_list[0]']->tick();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('CLOSE_REPORT_CONFIRM', $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('KARMA_REPORT_CLOSED_SUCCESS', $crawler->text());
+		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
+		$this->assertContainsLang('NO_REPORTS', $crawler->text());
+	}
+
+	public function test_delete_karma_report()
+	{
+		$this->logout();
+		$this->login();
+		$this->admin_login();
+		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports_closed&sid=' . $this->sid);
+		$this->assertContainsLang('MCP_KARMA_REPORTS_CLOSED_EXPLAIN', $crawler->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
+		$form = $crawler->selectButton('action[delete]')->form();
+		$form['karma_report_id_list[0]']->tick();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('DELETE_REPORT_CONFIRM', $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('KARMA_REPORT_DELETED_SUCCESS', $crawler->text());
+		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
 	}
 }
