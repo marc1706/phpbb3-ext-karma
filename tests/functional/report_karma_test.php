@@ -70,10 +70,10 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->assertContainsLang('UCP_RECEIVED_KARMA', $crawler->text());
 		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
 		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
-		$link_2 = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(0)->link()->getUri();
 		$link_1 = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(1)->link()->getUri();
-		$this->report_karma(2, $link_2);
 		$this->report_karma(1, $link_1);
+		$link_2 = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(0)->link()->getUri();
+		$this->report_karma(2, $link_2);
 	}
 
 	protected function report_karma($i, $link)
@@ -101,7 +101,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
 		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('action[close]')->form();
 		$form['karma_report_id_list[0]']->tick();
 		$crawler = self::submit($form);
@@ -111,27 +111,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->assertContainsLang('KARMA_REPORT_CLOSED_SUCCESS', $crawler->text());
 		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
-		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
-	}
-
-	public function test_delete_open_karma_report()
-	{
-		$this->logout();
-		$this->login();
-		$this->admin_login();
-		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
-		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
-		$form = $crawler->selectButton('action[delete]')->form();
-		$form['karma_report_id_list[0]']->tick();
-		$crawler = self::submit($form);
-		$this->assertContainsLang('DELETE_REPORT_CONFIRM', $crawler->text());
-		$form = $crawler->selectButton('confirm')->form();
-		$crawler = self::submit($form);
-		$this->assertContainsLang('KARMA_REPORT_DELETED_SUCCESS', $crawler->text());
-		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
-		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
-		$this->assertContainsLang('NO_REPORTS', $crawler->text());
+		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
 	}
 
 	public function test_delete_closed_karma_report()
@@ -141,7 +121,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports_closed&sid=' . $this->sid);
 		$this->assertContainsLang('MCP_KARMA_REPORTS_CLOSED_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('action[delete]')->form();
 		$form['karma_report_id_list[0]']->tick();
 		$crawler = self::submit($form);
@@ -153,5 +133,43 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->markTestIncomplete('Link to previous page referenced incorrectly');
 		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
+		$this->assertContainsLang('NO_REPORTS', $crawler->text());
+	}
+
+	public function test_delete_open_karma_report()
+	{
+		$this->logout();
+		$this->login();
+		$this->admin_login();
+		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
+		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
+		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
+		$form = $crawler->selectButton('action[delete]')->form();
+		$form['karma_report_id_list[0]']->tick();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('DELETE_REPORT_CONFIRM', $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('KARMA_REPORT_DELETED_SUCCESS', $crawler->text());
+		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
+		$this->assertContainsLang('NO_REPORTS', $crawler->text());
+
+		$this->delete_test_user_post();
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$this->assertNotContains('Testing Subject 1', $crawler->filter('html')->text());
+		$this->delete_test_user_post();
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$this->assertNotContains('Testing Subject 2', $crawler->filter('html')->text());
+	}
+
+	protected function delete_test_user_post()
+	{
+		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$link = $crawler->selectLink($this->lang('DELETE_POST', '', ''))->eq(1)->link()->getUri();
+		$crawler = self::request('GET', substr($link, strpos($link, 'posting.php?mode=delete')) ."&sid={$this->sid}");
+		$form = $crawler->selectButton('Yes')->form();
+		$form['delete_permanent']->tick();
+		$crawler = self::submit($form);
 	}
 }
