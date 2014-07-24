@@ -70,17 +70,16 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->assertContainsLang('UCP_RECEIVED_KARMA', $crawler->text());
 		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
 		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
-		$link_1 = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(1)->link()->getUri();
-		$this->report_karma(1, $link_1);
-		$link_2 = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(0)->link()->getUri();
-		$this->report_karma(2, $link_2);
+		$this->report_karma();
+		$this->report_karma();
 	}
 
-	protected function report_karma($i, $link)
+	protected function report_karma()
 	{
 		$crawler = $this->request('GET', 'ucp.php?i=\phpbb\karma\ucp\received_karma&sid=' . $this->sid);
+		$link = $crawler->selectLink($this->lang('KARMA_REPORT', '', ''))->eq(0)->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'app.php/reportkarma')));
-		$this->assertContains('Testing Subject ' . $i, $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('submit')->form();
 		$crawler = self::submit($form);
 		$this->assertContainsLang('KARMA_REPORT_TEXT_EMPTY', $crawler->text());
@@ -101,7 +100,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
 		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('action[close]')->form();
 		$form['karma_report_id_list[0]']->tick();
 		$crawler = self::submit($form);
@@ -111,7 +110,11 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->assertContainsLang('KARMA_REPORT_CLOSED_SUCCESS', $crawler->text());
 		$link = $crawler->selectLink($this->lang('RETURN_PAGE', '', ''))->link()->getUri();
 		$crawler = self::request('GET', substr($link, strpos($link, 'mcp.php')));
-		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
+
+		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports_closed&sid=' . $this->sid);
+		$this->assertContainsLang('MCP_KARMA_REPORTS_CLOSED_EXPLAIN', $crawler->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 	}
 
 	public function test_delete_closed_karma_report()
@@ -121,7 +124,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports_closed&sid=' . $this->sid);
 		$this->assertContainsLang('MCP_KARMA_REPORTS_CLOSED_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 2', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('action[delete]')->form();
 		$form['karma_report_id_list[0]']->tick();
 		$crawler = self::submit($form);
@@ -143,7 +146,7 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$crawler = $this->request('GET', 'mcp.php?i=\phpbb\karma\mcp\reported_karma&mode=reports&sid=' . $this->sid);
 		$this->assertContainsLang('MCP_KARMA_REPORTS_OPEN_EXPLAIN', $crawler->text());
-		$this->assertContains('Testing Subject 1', $crawler->filter('html')->text());
+		$this->assertContains('Testing Subject', $crawler->filter('html')->text());
 		$form = $crawler->selectButton('action[delete]')->form();
 		$form['karma_report_id_list[0]']->tick();
 		$crawler = self::submit($form);
@@ -156,10 +159,9 @@ class report_karma_test extends \phpbb_functional_test_case
 		$this->assertContainsLang('NO_REPORTS', $crawler->text());
 
 		$this->delete_test_user_post();
-		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
-		$this->assertNotContains('Testing Subject 1', $crawler->filter('html')->text());
 		$this->delete_test_user_post();
 		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
+		$this->assertNotContains('Testing Subject 1', $crawler->filter('html')->text());
 		$this->assertNotContains('Testing Subject 2', $crawler->filter('html')->text());
 	}
 
