@@ -163,6 +163,8 @@ class report_karma_test extends \phpbb_functional_test_case
 		$crawler = self::request('GET', "viewtopic.php?t=1&sid={$this->sid}");
 		$this->assertNotContains('Testing Subject 1', $crawler->filter('html')->text());
 		$this->assertNotContains('Testing Subject 2', $crawler->filter('html')->text());
+
+		$this->delete_given_karma();
 	}
 
 	protected function delete_test_user_post()
@@ -173,5 +175,16 @@ class report_karma_test extends \phpbb_functional_test_case
 		$form = $crawler->selectButton('Yes')->form();
 		$form['delete_permanent']->tick();
 		$crawler = self::submit($form);
+	}
+
+	protected function delete_given_karma()
+	{
+		$crawler = $this->request('GET', 'adm/index.php?i=\phpbb\karma\acp\main_module&mode=history&sid=' . $this->sid);
+		$form = $crawler->selectButton('action[del_all]')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('CONFIRM_OPERATION', $crawler->text());
+		$form = $crawler->selectButton('confirm')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('NO_ENTRIES', $crawler->text());
 	}
 }
