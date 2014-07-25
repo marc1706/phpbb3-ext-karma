@@ -255,10 +255,14 @@ class reported_karma
 			// TODO notifications
 
 			// Show the succes page
-			if(!empty($karma_reports) && $karma_reports[0]['karma_report_closed'] == 1)
+			if (!empty($karma_reports) && $karma_reports[0]['karma_report_closed'] == 1)
+			{
 				$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports_closed';
+			}
 			else
+			{
 				$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports';
+			}
 			meta_refresh(3, $redirect);
 			trigger_error($this->user->lang['KARMA_REPORT' . ((sizeof($karma_report_id_list) > 1) ? 'S_' : '_') . strtoupper($action) . 'D_SUCCESS'] . '<br /><br />' . sprintf($this->user->lang['RETURN_PAGE'], "<a href=\"$redirect\">", '</a>'));
 		}
