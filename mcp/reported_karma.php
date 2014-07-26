@@ -184,7 +184,7 @@ class reported_karma
 					'S_MCP_ACTION'			=> $this->u_action,
 					'S_CLOSED'				=> $closed,
 
-					'PAGE_NUMBER'			=> $pagination->on_page($base_url, $total, $this->config['topics_per_page'], $start),
+					'PAGE_NUMBER'			=> $pagination->on_page($total, $this->config['topics_per_page'], $start),
 					'TOTAL'					=> $total,
 					'TOTAL_KARMA_REPORTS'	=> $this->user->lang('LIST_KARMA_REPORTS', (int) $total),
 					)
@@ -255,7 +255,14 @@ class reported_karma
 			// TODO notifications
 
 			// Show the succes page
-			$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports';
+			if (!empty($karma_reports) && $karma_reports[0]['karma_report_closed'] == 1)
+			{
+				$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports_closed';
+			}
+			else
+			{
+				$redirect = build_url(array('mode', 'r', 'quickmod', 'confirm_key')) . '&amp;mode=reports';
+			}
 			meta_refresh(3, $redirect);
 			trigger_error($this->user->lang['KARMA_REPORT' . ((sizeof($karma_report_id_list) > 1) ? 'S_' : '_') . strtoupper($action) . 'D_SUCCESS'] . '<br /><br />' . sprintf($this->user->lang['RETURN_PAGE'], "<a href=\"$redirect\">", '</a>'));
 		}
