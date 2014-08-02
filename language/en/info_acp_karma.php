@@ -36,4 +36,6 @@ $lang = array_merge($lang, array(
 	'ACP_KARMA'							=> 'Karma',
 	'ACP_KARMA_HISTORY'					=> 'Karma History',
 	'ACP_KARMA_HISTORY_EXPLAIN'			=> 'This is a list of all karma changes on this board.',
+	'ACP_KARMA_CONFIG'					=> 'General Settings',
+	'ACP_KARMA_CONFIG_EXPLAIN'			=> 'This is a list of general karma settings.',
 ));

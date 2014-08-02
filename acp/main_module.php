@@ -59,6 +59,9 @@ class main_module
 			case 'history':
 				$l_title = 'ACP_KARMA_HISTORY';
 			break;
+			case 'config':
+				$l_title = 'ACP_KARMA_CONFIG';
+			break;
 		}
 
 		$this->tpl_name = 'acp_karma';

@@ -153,6 +153,12 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 				'module_mode'		=> 'history',
 				'module_auth'		=> 'acl_a_viewlogs',
 			))),
+			array('module.add', array('acp', 'ACP_KARMA', array(
+				'module_basename'	=> '\phpbb\karma\acp\main_module',
+				'module_langname'	=> 'ACP_KARMA_CONFIG',
+				'module_mode'		=> 'config',
+				'module_auth'		=> 'acl_a_board',
+			))),
 		);
 	}
 
