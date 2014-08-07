@@ -77,6 +77,32 @@
 		</fieldset>
 	<!-- ENDIF -->
 
+<!-- ELSEIF S_KARMA_CONFIG -->
+
+	<!-- BEGIN options -->
+		<!-- IF options.S_LEGEND -->
+			<!-- IF not options.S_FIRST_ROW -->
+				</fieldset>
+			<!-- ENDIF -->
+			<fieldset>
+				<legend>{options.LEGEND}</legend>
+		<!-- ELSE -->
+
+			<dl>
+				<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+				<dd>{options.CONTENT}</dd>
+			</dl>
+
+		<!-- ENDIF -->
+	<!-- END options -->
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<legend>{L_SUBMIT}</legend>
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</fieldset>
+
 <!-- ENDIF -->
 
 </form>
