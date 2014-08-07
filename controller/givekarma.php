@@ -50,18 +50,32 @@ class givekarma
 	protected $helper;
 
 	/**
+	* Database object
+	* @var \phpbb\db\driver\driver_interface
+	*/
+	protected $db;
+
+	/**
+	* Config object
+	* @var \phpbb\config\config
+	*/
+	protected $config;
+
+	/**
 	* Constructor
 	* NOTE: The parameters of this method must match in order and type with
 	* the dependencies defined in the services.yml file for this service.
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param ContainerBuilder			$container			Container object
-	* @param \phpbb\request\request		$request			Request object
-	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user				User object
-	* @param \phpbb\controller\helper	$helper				Controller helper object
+	* @param \phpbb\auth\auth					$auth				Auth object
+	* @param ContainerBuilder					$container			Container object
+	* @param \phpbb\request\request				$request			Request object
+	* @param \phpbb\template\template			$template			Template object
+	* @param \phpbb\user						$user				User object
+	* @param \phpbb\controller\helper			$helper				Controller helper object
+	* @param \phpbb\db\driver\driver_interface	$db					Database object
+	* @param \phpbb\config\config				$config				Config Object
 	*/
-	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper)
+	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config)
 	{
 		$this->auth = $auth;
 		$this->container = $container;
@@ -69,6 +83,8 @@ class givekarma
 		$this->template = $template;
 		$this->user = $user;
 		$this->helper = $helper;
+		$this->db = $db;
+		$this->config = $config;
 	}
 
 	/**
@@ -150,6 +166,8 @@ class givekarma
 		{
 			trigger_error('NO_SELF_KARMA');
 		}
+
+		$this->validate_can_karma($giving_user_id);
 
 		// Set the necessary variables depending on the mode
 		$submitted = false;
@@ -382,6 +400,20 @@ class givekarma
 			}
 
 			login_box('');
+		}
+	}
+
+	private function validate_can_karma($giving_user_id)
+	{
+		$result = $this->db->sql_query('
+			SELECT user_karma_score
+			FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . $giving_user_id
+		);
+		$giving_user_karma = $this->db->sql_fetchfield('karma_score');
+		if ($giving_user_karma < $this->config['karma_minimum'])
+		{
+			trigger_error('INSUFFICIENT_KARMA');
 		}
 	}
 }

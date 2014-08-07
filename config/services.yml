@@ -65,6 +65,8 @@ services:
             - @template
             - @user
             - @controller.helper
+            - @dbal.conn
+            - @config
 
     karma.controller.reportkarma:
         class: phpbb\karma\controller\reportkarma
