@@ -115,5 +115,6 @@ $lang = array_merge($lang, array(
 	'KARMA_ALREADY_REPORTED'			=> 'Reported',
 	'NO_REPORT_OTHERS_KARMA'			=> 'You are not allowed to report karma given to others.',
 	'INSUFFICIENT_KARMA'				=> 'You are not allowed to give karma as you do not have minimum needed karma.',
+	'INSUFFICIENT_POSTS'				=> 'You are not allowed to give karma as you do not have minimum needed posts.'
 
 ));

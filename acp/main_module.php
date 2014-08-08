@@ -202,6 +202,7 @@ class main_module
 				$display_vars = array(
 					'legend'				=> 'ACP_KARMA_CONFIG',
 					'karma_minimum'			=> array('lang' => 'ACP_KARMA_MINIMUM',			'validate' => 'int',	'type' => 'text:3:4',		'explain' => true),
+					'post_minimum'			=> array('lang' => 'ACP_POST_MINIMUM',			'validate' => 'int',	'type' => 'text:3:4',		'explain' => true),
 				);
 				$this->new_config = $this->config;
 				$cfg_array = ($this->request->is_set('config')) ? $this->request->variable('config', array('' => ''), true) : $this->new_config;

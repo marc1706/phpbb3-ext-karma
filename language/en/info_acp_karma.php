@@ -40,4 +40,6 @@ $lang = array_merge($lang, array(
 	'ACP_KARMA_CONFIG_EXPLAIN'			=> 'This is a list of general karma settings.',
 	'ACP_KARMA_MINIMUM'					=> 'Needed karma',
 	'ACP_KARMA_MINIMUM_EXPLAIN'			=> 'After a user reaches this karma count, the user can karma',
+	'ACP_POST_MINIMUM'					=> 'Needed posts',
+	'ACP_POST_MINIMUM_EXPLAIN'			=> 'After a user reaches this post count, the user can karma',
 ));
