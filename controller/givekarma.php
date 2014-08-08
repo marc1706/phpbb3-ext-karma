@@ -411,7 +411,7 @@ class givekarma
 			WHERE user_id = ' . $giving_user_id
 		);
 		$giving_user_karma = $this->db->sql_fetchfield('karma_score');
-		if ($giving_user_karma < $this->config['karma_minimum'])
+		if ($giving_user_karma < $this->config['karma_minimum'] && !$this->auth->acl_get('a_'))
 		{
 			trigger_error('INSUFFICIENT_KARMA');
 		}
