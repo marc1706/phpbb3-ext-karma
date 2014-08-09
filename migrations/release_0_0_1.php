@@ -102,6 +102,7 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 			array('config.add', array('phpbb_karma_version', '0.0.1')),
 			array('config.add', array('karma_minimum', 0)),
 			array('config.add', array('post_minimum', 0)),
+			array('config.add', array('karma_per_day', 0)),
 
 			// Permissions
 			// Note that the boolean parameter indicates if the permission is global,

@@ -62,6 +62,12 @@ class givekarma
 	protected $config;
 
 	/**
+	* Karma table
+	* @var string
+	*/
+	protected $karma_table;
+
+	/**
 	* Constructor
 	* NOTE: The parameters of this method must match in order and type with
 	* the dependencies defined in the services.yml file for this service.
@@ -74,8 +80,9 @@ class givekarma
 	* @param \phpbb\controller\helper			$helper				Controller helper object
 	* @param \phpbb\db\driver\driver_interface	$db					Database object
 	* @param \phpbb\config\config				$config				Config Object
+	* @param string								$karma_table		Karma table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config)
+	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, $karma_table)
 	{
 		$this->auth = $auth;
 		$this->container = $container;
@@ -85,6 +92,7 @@ class givekarma
 		$this->helper = $helper;
 		$this->db = $db;
 		$this->config = $config;
+		$this->karma_table = $karma_table;
 	}
 
 	/**
@@ -425,6 +433,23 @@ class givekarma
 		if ($this->user->data['user_posts'] < $this->config['post_minimum'])
 		{
 			trigger_error('INSUFFICIENT_POSTS');
+		}
+
+		if ($this->config['karma_per_day'])
+		{
+			$result = $this->db->sql_query('
+				SELECT COUNT(*) as karma_per_day
+				FROM ' . $this->karma_table . '
+				WHERE giving_user_id = ' . $this->user->data['user_id'] . '
+					AND karma_time > ' . (time() - 86400)
+			);
+			$karma_count = $this->db->sql_fetchfield('karma_per_day');
+			$this->db->sql_freeresult($result);
+
+			if ($karma_count >= $this->config['karma_per_day'])
+			{
+				trigger_error('KARMA_PER_DAY_LIMIT_REACHED');
+			}
 		}
 	}
 }

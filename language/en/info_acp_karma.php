@@ -42,4 +42,7 @@ $lang = array_merge($lang, array(
 	'ACP_KARMA_MINIMUM_EXPLAIN'			=> 'After a user reaches this karma count, the user can karma',
 	'ACP_POST_MINIMUM'					=> 'Needed posts',
 	'ACP_POST_MINIMUM_EXPLAIN'			=> 'After a user reaches this post count, the user can karma',
+	'ACP_KARMA_PER_DAY'					=> 'Limit per day karmas by',
+	'ACP_KARMA_PER_DAY_EXPLAIN'			=> 'Number of karma changes for a single user, zero to disable.',
+
 ));
