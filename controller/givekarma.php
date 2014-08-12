@@ -418,11 +418,10 @@ class givekarma
 	*/
 	protected function check_can_give_karma($giving_user_id)
 	{
-		$result = $this->db->sql_query('
-			SELECT user_karma_score
+		$sql = 'SELECT user_karma_score
 			FROM ' . USERS_TABLE . '
-			WHERE user_id = ' . $giving_user_id
-		);
+			WHERE user_id = ' . (int) $giving_user_id;
+		$result = $this->db->sql_query($sql);
 		$giving_user_karma = $this->db->sql_fetchfield('karma_score');
 		$this->db->sql_freeresult($result);
 		if ($this->auth->acl_get('a_'))
@@ -442,12 +441,11 @@ class givekarma
 
 		if ($this->config['karma_per_day'])
 		{
-			$result = $this->db->sql_query('
-				SELECT COUNT(*) as karma_per_day
+			$sql = 'SELECT COUNT(karma_id) as karma_per_day
 				FROM ' . $this->karma_table . '
 				WHERE giving_user_id = ' . $this->user->data['user_id'] . '
 					AND karma_time > ' . (time() - 86400)
-			);
+			$result = $this->db->sql_query($sql);
 			$karma_count = $this->db->sql_fetchfield('karma_per_day');
 			$this->db->sql_freeresult($result);
 
