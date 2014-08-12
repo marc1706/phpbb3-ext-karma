@@ -19,6 +19,7 @@ class main_info
 			'version'	=> '0.0.1',
 			'modes'		=> array(
 				'history'	=> array('title' => 'ACP_KARMA_HISTORY','auth' => 'acl_a_viewlogs', 'cat' => array('ACP_KARMA')),
+				'config'	=> array('title' => 'ACP_KARMA_CONFIG','auth' => 'acl_a_board', 'cat' => array('ACP_KARMA')),
 			),
 		);
 	}

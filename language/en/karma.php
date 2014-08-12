@@ -114,5 +114,10 @@ $lang = array_merge($lang, array(
 	'KARMA_DELETE_CONFIRM'				=> 'Are you sure you want to delete this karma?',
 	'KARMA_ALREADY_REPORTED'			=> 'Reported',
 	'NO_REPORT_OTHERS_KARMA'			=> 'You are not allowed to report karma given to others.',
+	'INSUFFICIENT_KARMA'				=> 'You are not allowed to give karma as you do not have minimum needed karma.',
+	'INSUFFICIENT_POSTS'				=> 'You are not allowed to give karma as you do not have minimum needed posts.',
+	'ACP_KARMA_APPEND_TIMES'			=> 'times',
+	'ACP_KARMA_APPEND_POSTS'			=> 'posts',
+	'KARMA_PER_DAY_LIMIT_REACHED'		=> 'You are not allowed to give karma now as you have reached the karma per day limit.',
 
 ));

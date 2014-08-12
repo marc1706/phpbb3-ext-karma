@@ -100,6 +100,9 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 		return array(
 			// Config values
 			array('config.add', array('phpbb_karma_version', '0.0.1')),
+			array('config.add', array('karma_minimum', 0)),
+			array('config.add', array('post_minimum', 0)),
+			array('config.add', array('karma_per_day', 0)),
 
 			// Permissions
 			// Note that the boolean parameter indicates if the permission is global,
@@ -147,6 +150,12 @@ class release_0_0_1 extends \phpbb\db\migration\migration
 
 			// ACP module
 			array('module.add', array('acp', 'ACP_CAT_DOT_MODS', 'ACP_KARMA')),
+			array('module.add', array('acp', 'ACP_KARMA', array(
+				'module_basename'	=> '\phpbb\karma\acp\main_module',
+				'module_langname'	=> 'ACP_KARMA_CONFIG',
+				'module_mode'		=> 'config',
+				'module_auth'		=> 'acl_a_board',
+			))),
 			array('module.add', array('acp', 'ACP_KARMA', array(
 				'module_basename'	=> '\phpbb\karma\acp\main_module',
 				'module_langname'	=> 'ACP_KARMA_HISTORY',

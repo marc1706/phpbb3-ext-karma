@@ -36,4 +36,13 @@ $lang = array_merge($lang, array(
 	'ACP_KARMA'							=> 'Karma',
 	'ACP_KARMA_HISTORY'					=> 'Karma History',
 	'ACP_KARMA_HISTORY_EXPLAIN'			=> 'This is a list of all karma changes on this board.',
+	'ACP_KARMA_CONFIG'					=> 'General Settings',
+	'ACP_KARMA_CONFIG_EXPLAIN'			=> 'This is a list of general karma settings.',
+	'ACP_KARMA_MINIMUM'					=> 'Needed karma',
+	'ACP_KARMA_MINIMUM_EXPLAIN'			=> 'After a user reaches this karma count, the user can give karma',
+	'ACP_POST_MINIMUM'					=> 'Needed posts',
+	'ACP_POST_MINIMUM_EXPLAIN'			=> 'After a user reaches this post count, the user can give karma',
+	'ACP_KARMA_PER_DAY'					=> 'Maximum amount of karmas per day',
+	'ACP_KARMA_PER_DAY_EXPLAIN'			=> 'Number of karma changes per day for a single user, zero to disable.',
+
 ));

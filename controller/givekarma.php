@@ -50,18 +50,39 @@ class givekarma
 	protected $helper;
 
 	/**
+	* Database object
+	* @var \phpbb\db\driver\driver_interface
+	*/
+	protected $db;
+
+	/**
+	* Config object
+	* @var \phpbb\config\config
+	*/
+	protected $config;
+
+	/**
+	* Karma table
+	* @var string
+	*/
+	protected $karma_table;
+
+	/**
 	* Constructor
 	* NOTE: The parameters of this method must match in order and type with
 	* the dependencies defined in the services.yml file for this service.
 	*
-	* @param \phpbb\auth\auth			$auth				Auth object
-	* @param ContainerBuilder			$container			Container object
-	* @param \phpbb\request\request		$request			Request object
-	* @param \phpbb\template\template	$template			Template object
-	* @param \phpbb\user				$user				User object
-	* @param \phpbb\controller\helper	$helper				Controller helper object
+	* @param \phpbb\auth\auth					$auth				Auth object
+	* @param ContainerBuilder					$container			Container object
+	* @param \phpbb\request\request				$request			Request object
+	* @param \phpbb\template\template			$template			Template object
+	* @param \phpbb\user						$user				User object
+	* @param \phpbb\controller\helper			$helper				Controller helper object
+	* @param \phpbb\db\driver\driver_interface	$db					Database object
+	* @param \phpbb\config\config				$config				Config Object
+	* @param string								$karma_table		Karma table
 	*/
-	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper)
+	public function __construct(\phpbb\auth\auth $auth, ContainerBuilder $container, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, $karma_table)
 	{
 		$this->auth = $auth;
 		$this->container = $container;
@@ -69,6 +90,9 @@ class givekarma
 		$this->template = $template;
 		$this->user = $user;
 		$this->helper = $helper;
+		$this->db = $db;
+		$this->config = $config;
+		$this->karma_table = $karma_table;
 	}
 
 	/**
@@ -150,6 +174,8 @@ class givekarma
 		{
 			trigger_error('NO_SELF_KARMA');
 		}
+
+		$this->check_can_give_karma($giving_user_id);
 
 		// Set the necessary variables depending on the mode
 		$submitted = false;
@@ -382,6 +408,51 @@ class givekarma
 			}
 
 			login_box('');
+		}
+	}
+
+	/**
+	* Checks whether a user can give karma or not
+	*
+	* @param	int		$giving_user_id			The ID of the user giving this karma
+	*/
+	protected function check_can_give_karma($giving_user_id)
+	{
+		$sql = 'SELECT user_karma_score
+			FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . (int) $giving_user_id;
+		$result = $this->db->sql_query($sql);
+		$giving_user_karma = $this->db->sql_fetchfield('karma_score');
+		$this->db->sql_freeresult($result);
+		if ($this->auth->acl_get('a_'))
+		{
+			return;
+		}
+
+		if ($giving_user_karma < $this->config['karma_minimum'])
+		{
+			trigger_error('INSUFFICIENT_KARMA');
+		}
+
+		if ($this->user->data['user_posts'] < $this->config['post_minimum'])
+		{
+			trigger_error('INSUFFICIENT_POSTS');
+		}
+
+		if ($this->config['karma_per_day'])
+		{
+			$sql = 'SELECT COUNT(karma_id) as karma_per_day
+				FROM ' . $this->karma_table . '
+				WHERE giving_user_id = ' . $this->user->data['user_id'] . '
+					AND karma_time > ' . (time() - 86400);
+			$result = $this->db->sql_query($sql);
+			$karma_count = $this->db->sql_fetchfield('karma_per_day');
+			$this->db->sql_freeresult($result);
+
+			if ($karma_count >= $this->config['karma_per_day'])
+			{
+				trigger_error('KARMA_PER_DAY_LIMIT_REACHED');
+			}
 		}
 	}
 }
