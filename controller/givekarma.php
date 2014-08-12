@@ -175,7 +175,7 @@ class givekarma
 			trigger_error('NO_SELF_KARMA');
 		}
 
-		$this->validate_can_karma($giving_user_id);
+		$this->check_can_give_karma($giving_user_id);
 
 		// Set the necessary variables depending on the mode
 		$submitted = false;
@@ -411,7 +411,12 @@ class givekarma
 		}
 	}
 
-	private function validate_can_karma($giving_user_id)
+	/**
+	* Checks whether a user can give karma or not
+	*
+	* @param	int		$giving_user_id			The ID of the user giving this karma
+	*/
+	protected function check_can_give_karma($giving_user_id)
 	{
 		$result = $this->db->sql_query('
 			SELECT user_karma_score
