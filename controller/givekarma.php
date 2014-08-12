@@ -444,7 +444,7 @@ class givekarma
 			$sql = 'SELECT COUNT(karma_id) as karma_per_day
 				FROM ' . $this->karma_table . '
 				WHERE giving_user_id = ' . $this->user->data['user_id'] . '
-					AND karma_time > ' . (time() - 86400)
+					AND karma_time > ' . (time() - 86400);
 			$result = $this->db->sql_query($sql);
 			$karma_count = $this->db->sql_fetchfield('karma_per_day');
 			$this->db->sql_freeresult($result);

@@ -118,6 +118,6 @@ $lang = array_merge($lang, array(
 	'INSUFFICIENT_POSTS'				=> 'You are not allowed to give karma as you do not have minimum needed posts.',
 	'ACP_KARMA_APPEND_TIMES'			=> 'times',
 	'ACP_KARMA_APPEND_POSTS'			=> 'posts',
-	'KARMA_PER_DAY_LIMIT_REACHED'		=> 'You are not allowed to give karma now as you have reached karma per day limit.',
+	'KARMA_PER_DAY_LIMIT_REACHED'		=> 'You are not allowed to give karma now as you have reached the karma per day limit.',
 
 ));
