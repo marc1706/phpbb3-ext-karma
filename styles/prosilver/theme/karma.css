@@ -9,12 +9,14 @@ ul.profile-icons li.givekarma-positive-icon {
 	margin: 0 0 0 10px;
 }
 
-.givekarma-positive-icon, .givekarma-positive-icon a {
+.givekarma-positive-icon{
 	background-image: url("./images/icon_karma_positive.gif");
+	background-position: 0 -20%;
 }
 
-.givekarma-negative-icon, .givekarma-negative-icon a {
+.givekarma-negative-icon{
 	background-image: url("./images/icon_karma_negative.gif");
+	background-position: 0 -20%;
 }
 
 ul.profile-icons li.givekarma-positive-icon a.karma-given,
