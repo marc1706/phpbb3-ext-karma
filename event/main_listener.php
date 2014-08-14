@@ -47,6 +47,12 @@ class main_listener implements EventSubscriberInterface
 	protected $helper;
 
 	/**
+	* Auth object
+	* @var \phpbb\auth\auth
+	*/
+	protected $auth;
+
+	/**
 	* Karma manager object
 	* @var \phpbb\karma\includes\manager
 	*/
@@ -75,16 +81,18 @@ class main_listener implements EventSubscriberInterface
 	*
 	* @param \phpbb\user							$user					User object
 	* @param \phpbb\controller\helper				$helper					Controller helper object
+	* @param \phpbb\auth\auth						$auth					Auth Object
 	* @param \phpbb\karma\includes\manager			$karma_manager			Karma manager object
 	* @param \phpbb\karma\includes\report_model		$karma_report_model		Karma report model object
 	* @param string									$karma_table			Name of karma database table
 	* @param string									$karma_types_table		Name of karma_types database table
 	*/
 
-	public function __construct(\phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\karma\includes\manager $karma_manager, \phpbb\karma\includes\report_model $karma_report_model, $karma_table, $karma_types_table)
+	public function __construct(\phpbb\user $user, \phpbb\controller\helper $helper, \phpbb\auth\auth $auth, \phpbb\karma\includes\manager $karma_manager, \phpbb\karma\includes\report_model $karma_report_model, $karma_table, $karma_types_table)
 	{
 		$this->user = $user;
 		$this->helper = $helper;
+		$this->auth = $auth;
 		$this->karma_manager = $karma_manager;
 		$this->karma_report_model = $karma_report_model;
 		$this->karma_table = $karma_table;
@@ -177,7 +185,7 @@ class main_listener implements EventSubscriberInterface
 			$post_row = $event['post_row'];
 			$post_row['POSTER_KARMA_SCORE'] = $this->karma_manager->format_karma_score($event['user_poster_data']['karma_score']);
 
-			if ($event['row']['user_id'] != $this->user->data['user_id'])
+			if ($event['row']['user_id'] != $this->user->data['user_id'] && $this->auth->acl_get('u_givekarma'))
 			{
 				// Add the URLs for the karma controls (thumbs up/down)
 				$post_row['U_GIVEKARMA_POSITIVE'] = $this->helper->route("karma_givekarma_controller", array('karma_type_name' => 'post', 'item_id' => $event['row']['post_id'], 'score' => 'positive'));
