@@ -1,26 +1,13 @@
 /* Styles for the thumbs up/down icons with posts
 ---------------------------------------- */
-ul.profile-icons li.givekarma-positive-icon, ul.profile-icons li.givekarma-negative-icon {
+/*ul.profile-icons li.givekarma-positive-icon, ul.profile-icons li.givekarma-negative-icon {
 	height: 20px;
 	width: 20px;
-}
-
-ul.profile-icons li.givekarma-positive-icon {
+}*/
+ul.profile-icons {
+	height: 30px;
+	width: 80px;
 	margin: 0 0 0 10px;
-}
-
-.givekarma-positive-icon{
-	background-image: url("./images/icon_karma_positive.gif");
-	background-position: 0 -20%;
-}
-
-.givekarma-negative-icon{
-	background-image: url("./images/icon_karma_negative.gif");
-	background-position: 0 -20%;
-}
-
-ul.profile-icons li.givekarma-positive-icon a.karma-given,
-ul.profile-icons li.givekarma-negative-icon a.karma-given {
 	background: none;
 }
 
