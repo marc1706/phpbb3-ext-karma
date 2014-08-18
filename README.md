@@ -1,8 +1,8 @@
 phpBB Extension - Karma System
 ==============================
 
-This is a karma extension for phpBB 3.1 and up. Development was started as part of the Google Summer of Code 2013, and continued in the Google Summer of Code 2014. The extension allows registered board users to add or subtracts points from other users' karma scores by rating their posts. The karma scores are displayed publicly in places where user info is displayed (next to posts, on their profiles etcetera). Karma that is deemed unfair may be reported to the board moderators, who may then edit or delete the reported karma in the Moderator Control Panel.
-Through Administration Control Panel, it is possible to view all given karma. Also, General Settings can be taken care of through ACP which includes setting of config values in order to prevent spams.
+This is a karma extension for phpBB 3.1 and up. Development was started as part of the Google Summer of Code 2013, and continued in the Google Summer of Code 2014. The extension allows registered board users to add or subtract points from other users' karma scores by rating their posts. The karma scores are displayed publicly in places where user info is displayed (next to posts, on their profiles etcetera). Karma that is deemed unfair may be reported to the board moderators, who may then edit or delete the reported karma in the Moderator Control Panel.
+Through Administration Control Panel, it is possible to view all given karma. Also, General Settings can be taken care of through ACP which includes setting of config values in order to prevent spam.
 
 
 Installation
